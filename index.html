@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Minuta</title>
+
+<style>
+body { font-family: Arial; padding:20px; }
+.box { border:1px solid #000; padding:10px; margin-bottom:10px; }
+h2 { background:#003366; color:#fff; padding:5px; }
+input, select { width:100%; padding:5px; margin:5px 0; }
+button { padding:10px; background:#003366; color:#fff; border:none; }
+</style>
+
 </head>
 
 <body>
@@ -11,18 +20,28 @@
 
 <form onsubmit="gerarPDF(event)">
 
-<input id="nome" placeholder="Nome" required><br><br>
-<input id="cpf" placeholder="CPF/CNPJ" required><br><br>
-<input id="cep" placeholder="CEP" required><br><br>
-<input id="telefone" placeholder="Telefone" required><br><br>
+<div class="box">
+<b>DESTINATÁRIO</b>
+<input id="nome" placeholder="Nome" required>
+<input id="cpf" placeholder="CPF/CNPJ" required>
+<input id="cep" placeholder="CEP" required>
+<input id="telefone" placeholder="Telefone" required>
+</div>
 
+<div class="box">
+<b>SERVIÇO</b>
 <select id="servico">
 <option>Expresso</option>
 <option>Premium</option>
 <option>Ecommerce</option>
 </select>
+</div>
 
-<br><br>
+<div class="box">
+<b>CARGA</b>
+<input id="volumes" placeholder="Volumes" required>
+<input id="peso" placeholder="Peso (kg)" required>
+</div>
 
 <button type="submit">GERAR MINUTA</button>
 
@@ -30,21 +49,53 @@
 
 <script>
 
+function formatCPF_CNPJ(v){
+v=v.replace(/\D/g,'');
+if(v.length==11) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+if(v.length==14) return v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
+return v;
+}
+
+function formatCEP(v){
+v=v.replace(/\D/g,'');
+return v.replace(/(\d{5})(\d{3})/,'$1-$2');
+}
+
+function formatTEL(v){
+v=v.replace(/\D/g,'');
+if(v.length==11) return v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+if(v.length==10) return v.replace(/(\d{2})(\d{4})(\d{4})/,'($1) $2-$3');
+return v;
+}
+
 function gerarPDF(e){
 e.preventDefault();
 
-const nome = document.getElementById("nome").value;
-const cpf = document.getElementById("cpf").value;
+let nome = document.getElementById("nome").value;
+let cpf = formatCPF_CNPJ(document.getElementById("cpf").value);
+let cep = formatCEP(document.getElementById("cep").value);
+let tel = formatTEL(document.getElementById("telefone").value);
+let servico = document.getElementById("servico").value;
+let volumes = document.getElementById("volumes").value;
+let peso = document.getElementById("peso").value;
 
-const conteudo = `
+let conteudo = `
 MINUTA DE EMBARQUE
 
-Nome: ${nome}
+DESTINATÁRIO: ${nome}
 CPF/CNPJ: ${cpf}
+CEP: ${cep}
+TELEFONE: ${tel}
+
+SERVIÇO: ${servico}
+
+VOLUMES: ${volumes}
+PESO: ${peso}
+
 `;
 
-const blob = new Blob([conteudo], { type: "application/pdf" });
-const link = document.createElement("a");
+let blob = new Blob([conteudo], { type: "application/pdf" });
+let link = document.createElement("a");
 
 link.href = URL.createObjectURL(blob);
 link.download = "minuta.pdf";

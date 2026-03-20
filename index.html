@@ -2,34 +2,95 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Minuta</title>
+<title>Minuta Azul</title>
 
 <style>
-body { font-family: Arial; padding:20px; }
-.box { border:1px solid #000; padding:10px; margin-bottom:10px; }
-h2 { background:#003366; color:#fff; padding:5px; }
-input, select { width:100%; padding:5px; margin:5px 0; }
-button { padding:10px; background:#003366; color:#fff; border:none; }
+body { font-family: Arial; padding:20px; background:#f5f5f5; }
+
+.container { max-width:900px; margin:auto; background:#fff; padding:20px; }
+
+.topo {
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.titulo {
+font-weight:bold;
+text-align:center;
+flex:1;
+}
+
+.coleta {
+text-align:right;
+}
+
+.barra {
+background:#003366;
+color:#fff;
+padding:5px;
+margin-top:10px;
+font-size:14px;
+}
+
+.box {
+border:1px solid #000;
+padding:10px;
+}
+
+input, select {
+width:100%;
+padding:6px;
+margin:4px 0;
+}
+
+.row {
+display:flex;
+gap:10px;
+}
+
+.col {
+flex:1;
+}
+
+button {
+width:100%;
+padding:12px;
+background:#003366;
+color:#fff;
+border:none;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+}
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 
 <body>
 
-<h2>MINUTA DE EMBARQUE</h2>
+<div class="container">
+
+<div class="topo">
+<img src="logo-azulcargo.png" style="height:60px;">
+
+<div class="titulo">
+MINUTA DE DESPACHO DE CARGA
+</div>
+
+<div class="coleta">
+<b>Nº DA COLETA</b><br>
+<span style="color:red;">10203040</span>
+</div>
+</div>
 
 <form onsubmit="gerarPDF(event)">
 
+<div class="barra">1. TIPO DE SERVIÇO</div>
 <div class="box">
-<b>DESTINATÁRIO</b>
-<input id="nome" placeholder="Nome" required>
-<input id="cpf" placeholder="CPF/CNPJ" required>
-<input id="cep" placeholder="CEP" required>
-<input id="telefone" placeholder="Telefone" required>
-</div>
-
-<div class="box">
-<b>SERVIÇO</b>
 <select id="servico">
 <option>Expresso</option>
 <option>Premium</option>
@@ -37,15 +98,41 @@ button { padding:10px; background:#003366; color:#fff; border:none; }
 </select>
 </div>
 
+<div class="barra">DESTINATÁRIO</div>
 <div class="box">
-<b>CARGA</b>
-<input id="volumes" placeholder="Volumes" required>
-<input id="peso" placeholder="Peso (kg)" required>
+
+<input id="nome" placeholder="Nome" required>
+
+<div class="row">
+<div class="col"><input id="cpf" placeholder="CPF/CNPJ" required></div>
+<div class="col"><input id="telefone" placeholder="Telefone" required></div>
+</div>
+
+<input id="endereco" placeholder="Endereço" required>
+
+<div class="row">
+<div class="col"><input id="cidade" placeholder="Cidade"></div>
+<div class="col"><input id="uf" placeholder="UF"></div>
+<div class="col"><input id="cep" placeholder="CEP"></div>
+</div>
+
+</div>
+
+<div class="barra">INFORMAÇÕES DA CARGA</div>
+<div class="box">
+
+<div class="row">
+<div class="col"><input id="volumes" placeholder="Volumes" required></div>
+<div class="col"><input id="peso" placeholder="Peso (kg)" required></div>
+</div>
+
 </div>
 
 <button type="submit">GERAR MINUTA</button>
 
 </form>
+
+</div>
 
 <script>
 
@@ -71,35 +158,65 @@ return v;
 function gerarPDF(e){
 e.preventDefault();
 
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+
 let nome = document.getElementById("nome").value;
 let cpf = formatCPF_CNPJ(document.getElementById("cpf").value);
-let cep = formatCEP(document.getElementById("cep").value);
 let tel = formatTEL(document.getElementById("telefone").value);
+let endereco = document.getElementById("endereco").value;
+let cidade = document.getElementById("cidade").value;
+let uf = document.getElementById("uf").value;
+let cep = formatCEP(document.getElementById("cep").value);
 let servico = document.getElementById("servico").value;
 let volumes = document.getElementById("volumes").value;
 let peso = document.getElementById("peso").value;
 
-let conteudo = `
-MINUTA DE EMBARQUE
+// LOGO
+const img = new Image();
+img.src = "logo-azulcargo.png";
 
-DESTINATÁRIO: ${nome}
-CPF/CNPJ: ${cpf}
-CEP: ${cep}
-TELEFONE: ${tel}
+img.onload = function(){
 
-SERVIÇO: ${servico}
+doc.addImage(img, 'PNG', 10, 5, 50, 20);
 
-VOLUMES: ${volumes}
-PESO: ${peso}
+// TÍTULO
+doc.setFontSize(12);
+doc.text("MINUTA DE DESPACHO DE CARGA", 105, 15, null, null, "center");
 
-`;
+// Nº COLETA
+doc.setFontSize(10);
+doc.text("Nº DA COLETA", 160, 10);
+doc.setTextColor(255,0,0);
+doc.text("10203040", 160, 15);
+doc.setTextColor(0,0,0);
 
-let blob = new Blob([conteudo], { type: "application/pdf" });
-let link = document.createElement("a");
+// DESTINATÁRIO
+doc.rect(10,30,190,40);
+doc.text("DESTINATÁRIO", 12,35);
+doc.text("Nome: " + nome, 12,42);
+doc.text("CPF/CNPJ: " + cpf, 12,48);
+doc.text("Telefone: " + tel, 110,48);
+doc.text("Endereço: " + endereco, 12,54);
+doc.text("Cidade: " + cidade + " - " + uf, 12,60);
+doc.text("CEP: " + cep, 110,60);
 
-link.href = URL.createObjectURL(blob);
-link.download = "minuta.pdf";
-link.click();
+// SERVIÇO
+doc.rect(10,75,190,15);
+doc.text("Serviço: " + servico, 12,85);
+
+// CARGA
+doc.rect(10,95,190,20);
+doc.text("Volumes: " + volumes, 12,105);
+doc.text("Peso: " + peso + " kg", 110,105);
+
+// ASSINATURA
+doc.line(10,130,100,130);
+doc.text("Responsável", 10,135);
+
+doc.output('dataurlnewwindow');
+
+}
 
 }
 

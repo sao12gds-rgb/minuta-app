@@ -7,6 +7,7 @@
 <title>Minuta Azul</title>
 
 <style>
+
 *{
 -webkit-print-color-adjust: exact !important;
 print-color-adjust: exact !important;
@@ -18,6 +19,7 @@ background:#eee;
 font-family:Arial;
 }
 
+/* A4 FIXO */
 .page {
 width:210mm;
 height:297mm;
@@ -28,6 +30,7 @@ box-sizing:border-box;
 overflow:hidden;
 }
 
+/* TABELA */
 table {
 width:100%;
 border-collapse:collapse;
@@ -39,12 +42,14 @@ border:1px solid #000;
 padding:5px;
 }
 
+/* HEADER */
 .header {
 background:#0b2d5c;
 color:#fff;
 font-weight:bold;
 }
 
+/* CAMPOS */
 input {
 width:100%;
 border:none;
@@ -53,6 +58,7 @@ font-weight:bold;
 outline:none;
 }
 
+/* BOTÃO */
 button {
 width:100%;
 padding:12px;
@@ -60,17 +66,34 @@ margin-top:5px;
 background:#0b2d5c;
 color:#fff;
 border:none;
+cursor:pointer;
 }
 
+/* IMPRESSÃO */
 @page {
 size:A4 portrait;
 margin:0;
 }
 
 @media print {
-body { background:#fff; }
-button { display:none; }
+
+body {
+background:#fff;
 }
+
+.page {
+width:210mm;
+height:297mm;
+margin:0;
+padding:5mm;
+}
+
+button {
+display:none;
+}
+
+}
+
 </style>
 </head>
 
@@ -81,4 +104,181 @@ button { display:none; }
 <table>
 <tr>
 <td style="width:30%">
-<img src="logo-azulcargo.png" style="height
+<img src="logo-azulcargo.png" style="height:60px;">
+</td>
+
+<td style="text-align:center"><b>MINUTA DE DESPACHO DE CARGA</b></td>
+
+<td style="text-align:right">
+<b>Nº DA COLETA</b><br>
+<input id="numero">
+</td>
+</tr>
+</table>
+
+<!-- SERVIÇO -->
+<table>
+<tr><td colspan="8" class="header">1. TIPO DE SERVIÇO</td></tr>
+<tr>
+<td><input type="radio" name="servico"></td><td>Expresso</td>
+<td><input type="radio" name="servico"></td><td>Premium</td>
+<td><input type="radio" name="servico"></td><td>Ecommerce</td>
+<td><input type="radio" name="servico"></td><td>Standard</td>
+</tr>
+</table>
+
+<!-- PAGAMENTO -->
+<table>
+<tr><td colspan="6" class="header">2. PAGAMENTO DO FRETE</td></tr>
+<tr>
+<td><input type="radio" name="pg"></td><td>Pago na origem</td>
+<td><input type="radio" name="pg"></td><td>Cliente correntista</td>
+<td>CNPJ</td><td><input></td>
+</tr>
+</table>
+
+<!-- ENTREGA -->
+<table>
+<tr><td colspan="6" class="header">3. FORMA DE ENTREGA</td></tr>
+<tr>
+<td><input type="radio" name="ent" onclick="toggleAeroporto(false)"></td><td>Entrega no endereço</td>
+<td><input type="radio" name="ent" onclick="toggleAeroporto(false)"></td><td>Retirada no local</td>
+<td><input type="radio" name="ent" onclick="toggleAeroporto(true)"></td><td>Retirada no aeroporto</td>
+</tr>
+
+<tr id="aeroportoRow" style="display:none">
+<td colspan="2">Local retirada</td>
+<td colspan="4">
+<input list="listaAeroportos">
+<datalist id="listaAeroportos"></datalist>
+</td>
+</tr>
+</table>
+
+<!-- REMETENTE / DESTINATÁRIO -->
+<table>
+<tr>
+<td colspan="3" class="header">REMETENTE</td>
+<td colspan="3" class="header">DESTINATÁRIO</td>
+</tr>
+
+<tr>
+<td>Nome</td><td colspan="2"><input></td>
+<td>Nome</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>CPF/CNPJ</td><td colspan="2"><input></td>
+<td>CPF/CNPJ</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>Endereço</td><td colspan="2"><input></td>
+<td>Endereço</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>Compl.</td><td colspan="2"><input></td>
+<td>Compl.</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>Cidade</td><td colspan="2"><input></td>
+<td>Cidade</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>CEP</td><td colspan="2"><input></td>
+<td>CEP</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>Telefone</td><td colspan="2"><input></td>
+<td>Telefone</td><td colspan="2"><input></td>
+</tr>
+</table>
+
+<!-- CARGA -->
+<table>
+<tr><td colspan="6" class="header">INFORMAÇÕES DA CARGA</td></tr>
+<tr>
+<td>Volumes</td><td><input></td>
+<td>Peso (kg)</td><td><input></td>
+<td>Dimensões</td><td><input></td>
+</tr>
+<tr>
+<td>Tipo de embalagem</td><td colspan="2"><input></td>
+<td>Descrição</td><td colspan="2"><input></td>
+</tr>
+</table>
+
+<!-- DOCUMENTAÇÃO -->
+<table>
+<tr><td colspan="6" class="header">DOCUMENTAÇÃO</td></tr>
+
+<tr>
+<td><input type="radio" name="doc"></td>
+<td colspan="2">Nota fiscal - Valor (R$)</td>
+<td colspan="3"><input value="R$ 0,00"></td>
+</tr>
+
+<tr>
+<td><input type="radio" name="doc"></td>
+<td colspan="2">Declaração de conteúdo - Valor declarado (R$)</td>
+<td colspan="3"><input value="R$ 0,00"></td>
+</tr>
+</table>
+
+<!-- DECLARAÇÃO -->
+<table>
+<tr><td class="header">DECLARAÇÃO</td></tr>
+<tr>
+<td style="font-size:10px">
+Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
+</td>
+</tr>
+</table>
+
+<!-- RESPONSÁVEL -->
+<table>
+<tr><td colspan="4" class="header">RESPONSÁVEL</td></tr>
+
+<tr>
+<td>Local</td><td><input></td>
+<td>Data</td><td><input></td>
+</tr>
+
+<tr>
+<td>RG</td><td><input></td>
+<td>Nome</td><td><input></td>
+</tr>
+</table>
+
+<button onclick="imprimir()">IMPRIMIR / GERAR PDF</button>
+
+</div>
+
+<script>
+
+// AEROPORTOS COMPLETOS
+const aeroportos = `AAX,AFL,AFLH1,AIF01,AIR,AJA02,AJU,ANA01,APD01,APQ01,APS02,APS03,AQA,ARM01,ARU,ATM,AXE01,BAC01,BEL,BELT1,BFH,BGV03,BHZ01,BHZ04,BHZ05,BNU02,BPG,BPS,BRA,BSB,BSB01,BSB02,BSB04,BVB,BVH,BVJ01,BVS,CAC,CAC01,CAU,CAU01,CAW01,CAX,CBA,CBW,CCI01,CDSP1,CDSP2,CDSP3,CDSP4,CEL,CFB,CGB,CGB04,CGB05,CGBT2,CGH,CGR,CGR01,CGRT1,CIZ,CKS,CLV,CMG,CNF,CNFT1,CPQ05,CPV,CSG01,CSU,CTG02,CWB,CWB05,CWBT1,CWBT2,CXJ,CXJ03,DIQ,DOU,DOUT1,DSO01,ERM,FEC,FEN,FLN,FLN01,FLNT2,FOR,FOR07,FORH8,FRC,GEL,GGB,GIG,GNM02,GPB,GRU,GRU03,GRUT1,GUI01,GVR,GXP01,GYN,HTA01,IDT01,IGU,IGU01,IJU02,IMP,IOS,IPN,ITB,ITG01,ITR01,IZA,JAC02,JAU02,JDO,JDR,JIA,JJD,JJG,JOI,JPA,JPA01,JPA04,JPE,JPO,JPR,JTC,JTN01,JUU01,LAJ01,LAZ,LDB,LDBT1,LFR02,LHNT1,LVR01,MAB,MAO,MAO01,MCP,MCZ,MCZH1,MEA,MEU,MGF,MII,MMA01,MMM01,MOC,MVF,NAT,NAT01,NIT03,NNS01,NVM01,NVT,NVV01,OAL,OLL01,OPP,OPS,PCW01,PDM01,PET,PFB,PGZ,PHB,PIL01,PLU,PMW,PMWT1,PNG01,PNZ,POA,POA01,POA03,POARC,POO01,PPB,PPY03,PSW01,PVH,PVH01,PVH02,QAK01,QBU01,QBX01,QCC01,QCD01,QCJ01,QDS01,QDV01,QDW03,QET02,QEV01,QGA01,QGB01,QGF01,QGP,QHB01,QHP01,QHV01,QIQ03,QIU01,QJA03,QJD01,QJF01,QJG01,QJH01,QJM01,QKA02,QKAT1,QKK01,QLB03,QLL01,QLY01,QMI02,QMO01,QNS02,QNV01,QOC03,QOC04,QPA02,QPB01,QPT01,QPV01,QPY01,QRV01,QSA01,QSC01,QSE02,QTB01,QVH02,QWJ01,QXD,QXM01,RAO,RBR,REC,REC04,REC05,RECT1,RIA,RIOT1,RIOT2,RIOT4,RODT1,ROO,RTF01,RVD,SAO09,SAO25,SAO30,SAO31,SDU,SER03,SJK,SJP,SLA01,SLZ,SMT,SOD03,SRR01,SSA,SSA02,SSAH1,SSAT3,SSZ01,STC01,STM,SUM02,TBT,TFF,TGQ,THE,TJL,TLZ01,TOW,TUR,TXF,UBA,UBX01,UDI,UMU,URG,UVI,VAG,VAL02,VCP,VDC,VIN02,VIX,VIX01,VPA02,VTM01,XAP,XAP01,ZBW01`.split(",");
+
+const lista = document.getElementById("listaAeroportos");
+aeroportos.forEach(a=>{
+let op=document.createElement("option");
+op.value=a;
+lista.appendChild(op);
+});
+
+function toggleAeroporto(v){
+document.getElementById("aeroportoRow").style.display = v ? "" : "none";
+}
+
+function imprimir(){
+window.print();
+}
+
+</script>
+
+</body>
+</html>

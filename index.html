@@ -22,62 +22,47 @@ padding:5mm;
 box-sizing:border-box;
 }
 
-/* TABELA PRINCIPAL */
 table {
 width:100%;
 border-collapse:collapse;
-font-size:11px;
+font-size:12.5px;
 }
 
 td {
 border:1px solid #000;
-padding:3px;
+padding:4px;
 vertical-align:middle;
 }
 
-/* BARRAS */
 .header {
 background:#0b2d5c;
 color:white;
 font-weight:bold;
-text-align:left;
 }
 
 .center { text-align:center; }
 .right { text-align:right; }
 
-/* CAMPOS */
 input {
 width:100%;
 border:none;
 background:transparent;
-font-size:11px;
+font-size:12.5px;
 outline:none;
 }
 
-/* LOGO */
 .logo {
-height:50px;
+height:55px;
 }
 
-/* MOBILE */
 @media(max-width:768px){
-.page {
-width:100%;
-height:auto;
-padding:10px;
-}
+.page { width:100%; height:auto; }
 }
 
-/* PRINT */
 @media print{
 body { background:white; }
-.page {
-margin:0;
-width:100%;
-height:auto;
-}
 button { display:none; }
+
 @page {
 size:A4;
 margin:5mm;
@@ -100,12 +85,12 @@ margin:5mm;
 
 <td class="center">
 <b>MINUTA DE DESPACHO DE CARGA</b><br>
-<span style="font-size:9px">Modelo protegido • edite apenas os campos azuis</span>
+<span style="font-size:10px">Modelo protegido</span>
 </td>
 
 <td class="right">
 <b>Nº DA COLETA</b><br>
-<span id="numero" style="color:red; font-weight:bold;"></span>
+<span id="numero" style="color:red;font-weight:bold;"></span>
 </td>
 </tr>
 </table>
@@ -200,18 +185,28 @@ margin:5mm;
 <!-- DOCUMENTAÇÃO -->
 <table>
 <tr><td colspan="6" class="header">DOCUMENTAÇÃO</td></tr>
+
 <tr>
-<td><input type="radio" name="doc"></td><td>Nota fiscal</td>
-<td>Valor</td><td><input id="valor"></td>
-<td>Valor declarado</td><td><input id="valor2"></td>
+<td><input type="radio" name="doc"></td>
+<td>Nota fiscal</td>
+<td>Valor (R$)</td>
+<td><input id="valor"></td>
+<td>Valor declarado (R$)</td>
+<td><input id="valor2"></td>
 </tr>
+
+<tr>
+<td><input type="radio" name="doc"></td>
+<td colspan="5">Declaração de conteúdo</td>
+</tr>
+
 </table>
 
 <!-- DECLARAÇÃO -->
 <table>
 <tr><td class="header">DECLARAÇÃO</td></tr>
 <tr>
-<td style="font-size:9px">
+<td style="font-size:10px">
 Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
 </td>
 </tr>
@@ -220,14 +215,17 @@ Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) confor
 <!-- RESPONSAVEL -->
 <table>
 <tr><td colspan="4" class="header">RESPONSÁVEL</td></tr>
+
 <tr>
 <td>Local</td><td><input></td>
-<td>Data</td><td><input></td>
+<td>Data</td><td><input id="data"></td>
 </tr>
+
 <tr>
-<td>RG</td><td><input></td>
+<td>RG</td><td><input id="rg"></td>
 <td>Nome</td><td><input></td>
 </tr>
+
 </table>
 
 <button onclick="window.print()" style="width:100%;padding:12px;margin-top:10px;background:#0b2d5c;color:white;">
@@ -238,25 +236,25 @@ IMPRIMIR
 
 <script>
 
-// NUMERO AUTOMATICO
+// NUMERO
 document.getElementById("numero").innerText =
 new Date().getFullYear()+""+Math.floor(Math.random()*100000);
 
-// MASCARAS
-document.addEventListener("blur",function(e){
-let v=e.target.value.replace(/\D/g,'');
+// DATA
+document.getElementById("data").addEventListener("blur", function(){
+let v=this.value.replace(/\D/g,'');
+if(v.length==8){
+this.value=v.replace(/(\d{2})(\d{2})(\d{4})/,'$1/$2/$3');
+}
+});
 
-if(e.target.id.includes("cpf")){
-if(v.length==11)e.target.value=v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
-if(v.length==14)e.target.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
+// RG
+document.getElementById("rg").addEventListener("blur", function(){
+let v=this.value.replace(/\D/g,'');
+if(v.length>=8){
+this.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/,'$1.$2.$3-$4');
 }
-if(e.target.id.includes("cep")){
-e.target.value=v.replace(/(\d{5})(\d{3})/,'$1-$2');
-}
-if(e.target.id.includes("tel")){
-e.target.value=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
-}
-}, true);
+});
 
 // MOEDA
 function moeda(el){

@@ -2,109 +2,85 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Minuta Azul</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Minuta Azul</title>
+
 <style>
-body { font-family: Arial; background:#f2f2f2; margin:0; }
-
-.container {
-max-width: 1000px;
-margin: auto;
-background: #fff;
-padding: 10px;
+body {
+font-family: Arial;
+background:#eee;
+margin:0;
 }
 
-/* TOPO */
-.topo {
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:10px;
+.page {
+width:210mm;
+height:297mm;
+margin:auto;
+background:white;
+padding:5mm;
+box-sizing:border-box;
 }
 
-.titulo {
-text-align:center;
-font-weight:bold;
-flex:1;
+/* TABELA PRINCIPAL */
+table {
+width:100%;
+border-collapse:collapse;
+font-size:11px;
+}
+
+td {
+border:1px solid #000;
+padding:3px;
+vertical-align:middle;
 }
 
 /* BARRAS */
-.barra {
+.header {
 background:#0b2d5c;
-color:#fff;
-padding:6px;
-margin-top:10px;
-font-size:13px;
+color:white;
+font-weight:bold;
+text-align:left;
 }
 
-/* GRID */
-.grid { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
-.grid3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; }
+.center { text-align:center; }
+.right { text-align:right; }
 
 /* CAMPOS */
-.box {
-border:1px solid #000;
-padding:6px;
-background:#e6eef7;
-}
-
 input {
 width:100%;
 border:none;
 background:transparent;
-font-size:14px;
-padding:6px;
+font-size:11px;
+outline:none;
 }
 
-/* BOTÃO */
-.print-btn {
-margin-top:15px;
-padding:14px;
-background:#0b2d5c;
-color:#fff;
-border:none;
-width:100%;
-font-size:16px;
+/* LOGO */
+.logo {
+height:50px;
 }
 
 /* MOBILE */
-@media (max-width:768px){
-.grid, .grid3 { grid-template-columns: 1fr; }
-
-.topo { flex-direction:column; align-items:flex-start; }
-
-.titulo { text-align:left; font-size:16px; }
-
-input { font-size:16px; padding:10px; }
-
-.print-btn { font-size:18px; padding:16px; }
-}
-
-/* IMPRESSÃO */
-@media print {
-
-.print-btn { display:none; }
-
-.container {
+@media(max-width:768px){
+.page {
 width:100%;
-margin:0;
-padding:0;
+height:auto;
+padding:10px;
+}
 }
 
+/* PRINT */
+@media print{
+body { background:white; }
+.page {
+margin:0;
+width:100%;
+height:auto;
+}
+button { display:none; }
 @page {
 size:A4;
 margin:5mm;
-}
-
-/* força layout padrão */
-.grid { grid-template-columns:1fr 1fr !important; }
-.grid3 { grid-template-columns:1fr 1fr 1fr !important; }
-
-input {
-font-size:11px;
-padding:2px;
 }
 }
 </style>
@@ -113,121 +89,161 @@ padding:2px;
 
 <body>
 
-<div class="container">
+<div class="page">
 
-<div class="topo">
-<img src="logo-azulcargo.png" style="height:60px;">
-<div class="titulo">MINUTA DE DESPACHO DE CARGA</div>
-<div><b>Nº DA COLETA</b><br><span id="numero" style="color:red;"></span></div>
-</div>
+<!-- TOPO -->
+<table>
+<tr>
+<td style="width:30%">
+<img src="logo-azulcargo.png" class="logo">
+</td>
 
-<!-- SERVIÇOS -->
-<div class="barra">1. TIPO DE SERVIÇO</div>
-<div class="grid3">
-<label><input type="checkbox"> Expresso</label>
-<label><input type="checkbox"> Premium</label>
-<label><input type="checkbox"> Ecommerce</label>
-</div>
+<td class="center">
+<b>MINUTA DE DESPACHO DE CARGA</b><br>
+<span style="font-size:9px">Modelo protegido • edite apenas os campos azuis</span>
+</td>
 
-<div class="barra">2. PAGAMENTO DO FRETE</div>
-<div class="grid3">
-<label><input type="checkbox"> Pago na origem</label>
-<label><input type="checkbox"> Cliente correntista</label>
-<input placeholder="CNPJ" inputmode="numeric">
-</div>
+<td class="right">
+<b>Nº DA COLETA</b><br>
+<span id="numero" style="color:red; font-weight:bold;"></span>
+</td>
+</tr>
+</table>
 
-<div class="barra">3. FORMA DE ENTREGA</div>
-<div class="grid3">
-<label><input type="checkbox"> Entrega no endereço</label>
-<label><input type="checkbox"> Retirada no local</label>
-<label><input type="checkbox"> Retirada no aeroporto</label>
-</div>
+<!-- SERVIÇO -->
+<table>
+<tr><td colspan="6" class="header">1. TIPO DE SERVIÇO</td></tr>
+<tr>
+<td><input type="radio" name="servico"></td><td>Expresso</td>
+<td><input type="radio" name="servico"></td><td>Premium</td>
+<td><input type="radio" name="servico"></td><td>Ecommerce</td>
+</tr>
+</table>
+
+<!-- PAGAMENTO -->
+<table>
+<tr><td colspan="6" class="header">2. PAGAMENTO DO FRETE</td></tr>
+<tr>
+<td><input type="radio" name="pg"></td><td>Pago na origem</td>
+<td><input type="radio" name="pg"></td><td>Cliente correntista</td>
+<td>CNPJ</td><td><input id="cnpj"></td>
+</tr>
+</table>
+
+<!-- ENTREGA -->
+<table>
+<tr><td colspan="6" class="header">3. FORMA DE ENTREGA</td></tr>
+<tr>
+<td><input type="radio" name="ent"></td><td>Entrega no endereço</td>
+<td><input type="radio" name="ent"></td><td>Retirada no local</td>
+<td><input type="radio" name="ent"></td><td>Retirada no aeroporto</td>
+</tr>
+</table>
 
 <!-- REMETENTE / DESTINATARIO -->
-<div class="grid">
+<table>
+<tr>
+<td colspan="3" class="header">REMETENTE</td>
+<td colspan="3" class="header">DESTINATÁRIO</td>
+</tr>
 
-<div>
-<div class="barra">REMETENTE</div>
-<div class="box"><input placeholder="Nome"></div>
-<div class="box"><input id="cpf_rem" placeholder="CPF/CNPJ" inputmode="numeric"></div>
-<div class="box"><input placeholder="Endereço"></div>
-<div class="box"><input placeholder="Complemento"></div>
-<div class="box"><input placeholder="Cidade"></div>
-<div class="box"><input id="cep_rem" placeholder="CEP" inputmode="numeric"></div>
-<div class="box"><input id="tel_rem" placeholder="Telefone" inputmode="numeric"></div>
-</div>
+<tr>
+<td>Nome</td><td colspan="2"><input></td>
+<td>Nome</td><td colspan="2"><input></td>
+</tr>
 
-<div>
-<div class="barra">DESTINATÁRIO</div>
-<div class="box"><input placeholder="Nome"></div>
-<div class="box"><input id="cpf" placeholder="CPF/CNPJ" inputmode="numeric"></div>
-<div class="box"><input placeholder="Endereço"></div>
-<div class="box"><input placeholder="Complemento"></div>
-<div class="box"><input placeholder="Cidade"></div>
-<div class="box"><input id="cep" placeholder="CEP" inputmode="numeric"></div>
-<div class="box"><input id="tel" placeholder="Telefone" inputmode="numeric"></div>
-</div>
+<tr>
+<td>CPF/CNPJ</td><td colspan="2"><input id="cpf"></td>
+<td>CPF/CNPJ</td><td colspan="2"><input id="cpf2"></td>
+</tr>
 
-</div>
+<tr>
+<td>Endereço</td><td colspan="2"><input></td>
+<td>Endereço</td><td colspan="2"><input></td>
+</tr>
 
-<!-- PAGADOR -->
-<div class="barra">TOMADOR (PAGADOR)</div>
-<div class="grid">
-<input placeholder="Nome">
-<input placeholder="CPF/CNPJ" inputmode="numeric">
-<input placeholder="Telefone" inputmode="numeric">
-<input placeholder="E-mail">
-</div>
+<tr>
+<td>Compl.</td><td colspan="2"><input></td>
+<td>Compl.</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>Cidade</td><td colspan="2"><input></td>
+<td>Cidade</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>CEP</td><td colspan="2"><input id="cep"></td>
+<td>CEP</td><td colspan="2"><input id="cep2"></td>
+</tr>
+
+<tr>
+<td>Telefone</td><td colspan="2"><input id="tel"></td>
+<td>Telefone</td><td colspan="2"><input id="tel2"></td>
+</tr>
+</table>
 
 <!-- CARGA -->
-<div class="barra">INFORMAÇÕES DA CARGA</div>
-<div class="grid">
-<input placeholder="Volumes">
-<input placeholder="Peso (kg)">
-<input placeholder="Dimensões">
-<input placeholder="Tipo de embalagem">
-<input placeholder="Descrição do conteúdo">
-</div>
+<table>
+<tr><td colspan="6" class="header">INFORMAÇÕES DA CARGA</td></tr>
+<tr>
+<td>Volumes</td><td><input></td>
+<td>Peso</td><td><input></td>
+<td>Dimensões</td><td><input></td>
+</tr>
+<tr>
+<td>Tipo</td><td colspan="2"><input></td>
+<td>Descrição</td><td colspan="2"><input></td>
+</tr>
+</table>
 
 <!-- DOCUMENTAÇÃO -->
-<div class="barra">DOCUMENTAÇÃO DA CARGA</div>
-<div class="grid">
-<label><input type="checkbox"> Nota fiscal</label>
-<input id="valor" placeholder="Valor (R$)">
-<label><input type="checkbox"> Declaração</label>
-<input id="valorDeclarado" placeholder="Valor declarado">
-</div>
+<table>
+<tr><td colspan="6" class="header">DOCUMENTAÇÃO</td></tr>
+<tr>
+<td><input type="radio" name="doc"></td><td>Nota fiscal</td>
+<td>Valor</td><td><input id="valor"></td>
+<td>Valor declarado</td><td><input id="valor2"></td>
+</tr>
+</table>
 
 <!-- DECLARAÇÃO -->
-<div class="barra">DECLARAÇÃO</div>
-<div class="box" style="font-size:10px;">
+<table>
+<tr><td class="header">DECLARAÇÃO</td></tr>
+<tr>
+<td style="font-size:9px">
 Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
-</div>
+</td>
+</tr>
+</table>
 
 <!-- RESPONSAVEL -->
-<div class="barra">RESPONSÁVEL</div>
-<div class="grid">
-<input placeholder="Local">
-<input placeholder="Data">
-<input placeholder="RG">
-<input placeholder="Nome completo">
-</div>
+<table>
+<tr><td colspan="4" class="header">RESPONSÁVEL</td></tr>
+<tr>
+<td>Local</td><td><input></td>
+<td>Data</td><td><input></td>
+</tr>
+<tr>
+<td>RG</td><td><input></td>
+<td>Nome</td><td><input></td>
+</tr>
+</table>
 
-<button class="print-btn" onclick="window.print()">IMPRIMIR MINUTA</button>
+<button onclick="window.print()" style="width:100%;padding:12px;margin-top:10px;background:#0b2d5c;color:white;">
+IMPRIMIR
+</button>
 
 </div>
 
 <script>
 
-// NUMERO
-function gerarNumero(){
-const d=new Date();
-return d.getFullYear()+""+(d.getMonth()+1)+""+d.getDate()+""+d.getHours()+""+d.getMinutes()+Math.floor(Math.random()*100);
-}
-document.getElementById("numero").innerText=gerarNumero();
+// NUMERO AUTOMATICO
+document.getElementById("numero").innerText =
+new Date().getFullYear()+""+Math.floor(Math.random()*100000);
 
 // MASCARAS
-document.addEventListener("focusout",function(e){
+document.addEventListener("blur",function(e){
 let v=e.target.value.replace(/\D/g,'');
 
 if(e.target.id.includes("cpf")){
@@ -238,21 +254,21 @@ if(e.target.id.includes("cep")){
 e.target.value=v.replace(/(\d{5})(\d{3})/,'$1-$2');
 }
 if(e.target.id.includes("tel")){
-if(v.length==11)e.target.value=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+e.target.value=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
 }
-});
+}, true);
 
 // MOEDA
-function formatMoeda(el){
-let v = el.value.replace(/\D/g,'');
-v = (v/100).toFixed(2) + '';
-v = v.replace(".", ",");
-v = v.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-el.value = "R$ " + v;
+function moeda(el){
+let v=el.value.replace(/\D/g,'');
+v=(v/100).toFixed(2)+'';
+v=v.replace(".",",");
+v=v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
+el.value="R$ "+v;
 }
 
-document.getElementById("valor").addEventListener("blur", function(){ formatMoeda(this); });
-document.getElementById("valorDeclarado").addEventListener("blur", function(){ formatMoeda(this); });
+document.getElementById("valor").onblur=function(){moeda(this)};
+document.getElementById("valor2").onblur=function(){moeda(this)};
 
 </script>
 

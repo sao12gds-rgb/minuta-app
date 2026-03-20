@@ -5,32 +5,80 @@
 <title>Minuta Azul</title>
 
 <style>
-body { font-family: Arial; background:#f5f5f5; padding:20px; }
-.container { width:1000px; margin:auto; background:#fff; padding:15px; }
+body { font-family: Arial; background:#f2f2f2; }
 
-.topo { display:flex; justify-content:space-between; align-items:center; }
-.titulo { text-align:center; font-weight:bold; flex:1; }
+.container {
+width: 1000px;
+margin: auto;
+background: #fff;
+padding: 10px;
+}
 
-.barra { background:#0b2d5c; color:#fff; padding:5px; margin-top:10px; font-size:13px; }
+.topo {
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
 
-.grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; }
-.grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+.titulo {
+text-align:center;
+font-weight:bold;
+flex:1;
+}
 
-input { width:100%; padding:5px; margin-top:3px; }
+.barra {
+background:#0b2d5c;
+color:#fff;
+padding:5px;
+margin-top:10px;
+font-size:13px;
+}
 
-button {
+.grid {
+display:grid;
+grid-template-columns: repeat(2, 1fr);
+gap:10px;
+}
+
+.grid3 {
+display:grid;
+grid-template-columns: repeat(3, 1fr);
+gap:10px;
+}
+
+.box {
+border:1px solid #000;
+padding:5px;
+background:#e6eef7;
+}
+
+input {
 width:100%;
-padding:12px;
+border:none;
+background:transparent;
+}
+
+.row {
+display:grid;
+grid-template-columns: 1fr 1fr 1fr;
+}
+
+.print-btn {
+margin-top:10px;
+padding:10px;
 background:#0b2d5c;
 color:#fff;
 border:none;
-font-weight:bold;
-margin-top:15px;
+width:100%;
 cursor:pointer;
 }
-</style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+/* IMPRESSÃO */
+@media print {
+.print-btn { display:none; }
+body { background:#fff; }
+}
+</style>
 
 </head>
 
@@ -41,123 +89,127 @@ cursor:pointer;
 <div class="topo">
 <img src="logo-azulcargo.png" style="height:60px;">
 <div class="titulo">MINUTA DE DESPACHO DE CARGA</div>
-<div><b>Nº DA COLETA</b><br><span id="numeroColeta" style="color:red;"></span></div>
+<div><b>Nº DA COLETA</b><br><span id="numero" style="color:red;"></span></div>
 </div>
 
-<form onsubmit="gerarPDF(event)">
+<!-- SERVIÇOS -->
+<div class="barra">1. TIPO DE SERVIÇO</div>
+<div class="grid3">
+<label><input type="checkbox"> Expresso</label>
+<label><input type="checkbox"> Premium</label>
+<label><input type="checkbox"> Ecommerce</label>
+</div>
 
+<div class="barra">2. PAGAMENTO DO FRETE</div>
+<div class="grid3">
+<label><input type="checkbox"> Pago na origem</label>
+<label><input type="checkbox"> Cliente correntista</label>
+<input placeholder="CNPJ">
+</div>
+
+<div class="barra">3. FORMA DE ENTREGA</div>
+<div class="grid3">
+<label><input type="checkbox"> Entrega no endereço</label>
+<label><input type="checkbox"> Retirada no local</label>
+<label><input type="checkbox"> Retirada no aeroporto</label>
+</div>
+
+<!-- REMETENTE / DESTINATARIO -->
+<div class="grid">
+
+<div>
+<div class="barra">REMETENTE</div>
+<div class="box"><input placeholder="Nome"></div>
+<div class="box"><input id="cpf_rem" placeholder="CPF/CNPJ"></div>
+<div class="box"><input placeholder="Endereço"></div>
+<div class="box"><input placeholder="Cidade"></div>
+<div class="box"><input id="cep_rem" placeholder="CEP"></div>
+<div class="box"><input id="tel_rem" placeholder="Telefone"></div>
+</div>
+
+<div>
 <div class="barra">DESTINATÁRIO</div>
-<div class="grid-2">
-<input id="nome" placeholder="Nome">
-<input id="cpf" placeholder="CPF/CNPJ">
-<input id="endereco" placeholder="Endereço">
-<input id="cidade" placeholder="Cidade">
-<input id="cep" placeholder="CEP">
-<input id="telefone" placeholder="Telefone">
+<div class="box"><input placeholder="Nome"></div>
+<div class="box"><input id="cpf" placeholder="CPF/CNPJ"></div>
+<div class="box"><input placeholder="Endereço"></div>
+<div class="box"><input placeholder="Cidade"></div>
+<div class="box"><input id="cep" placeholder="CEP"></div>
+<div class="box"><input id="tel" placeholder="Telefone"></div>
 </div>
 
+</div>
+
+<!-- PAGADOR -->
+<div class="barra">TOMADOR (PAGADOR)</div>
+<div class="grid">
+<input placeholder="Nome">
+<input placeholder="CPF/CNPJ">
+<input placeholder="Telefone">
+<input placeholder="E-mail">
+</div>
+
+<!-- CARGA -->
 <div class="barra">INFORMAÇÕES DA CARGA</div>
-<div class="grid-2">
-<input id="volumes" placeholder="Volumes">
-<input id="peso" placeholder="Peso (kg)">
+<div class="grid">
+<input placeholder="Volumes">
+<input placeholder="Peso (kg)">
+<input placeholder="Dimensões">
+<input placeholder="Tipo de embalagem">
+<input placeholder="Descrição do conteúdo">
 </div>
 
+<!-- DOCUMENTAÇÃO -->
+<div class="barra">DOCUMENTAÇÃO DA CARGA</div>
+<div class="grid">
+<label><input type="checkbox"> Nota fiscal</label>
+<input placeholder="Valor (R$)">
+<label><input type="checkbox"> Declaração</label>
+<input placeholder="Valor declarado">
+</div>
+
+<!-- DECLARAÇÃO -->
 <div class="barra">DECLARAÇÃO</div>
-<div style="border:1px solid #000; padding:10px; font-size:11px; text-align:justify;">
+<div class="box" style="font-size:11px;">
 Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
 </div>
 
-<button type="submit">GERAR MINUTA</button>
+<!-- RESPONSAVEL -->
+<div class="barra">RESPONSÁVEL</div>
+<div class="grid">
+<input placeholder="Local">
+<input placeholder="Data">
+<input placeholder="RG">
+<input placeholder="Nome completo">
+</div>
 
-</form>
+<button class="print-btn" onclick="window.print()">IMPRIMIR MINUTA</button>
 
 </div>
 
 <script>
 
-// NUMERO
-function gerarNumeroColeta(){
+// NUMERO AUTOMATICO
+function gerarNumero(){
 const d=new Date();
-return d.getFullYear()+""+(d.getMonth()+1)+""+d.getDate()+""+d.getHours()+""+d.getMinutes()+""+Math.floor(Math.random()*100);
+return d.getFullYear()+""+(d.getMonth()+1)+""+d.getDate()+""+d.getHours()+""+d.getMinutes()+Math.floor(Math.random()*100);
 }
-document.getElementById("numeroColeta").innerText=gerarNumeroColeta();
+document.getElementById("numero").innerText=gerarNumero();
 
 // MASCARAS
 document.addEventListener("focusout",function(e){
 let v=e.target.value.replace(/\D/g,'');
 
-if(e.target.id=="cpf"){
+if(e.target.id.includes("cpf")){
 if(v.length==11)e.target.value=v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
 if(v.length==14)e.target.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
 }
-if(e.target.id=="cep"){
+if(e.target.id.includes("cep")){
 e.target.value=v.replace(/(\d{5})(\d{3})/,'$1-$2');
 }
-if(e.target.id=="telefone"){
+if(e.target.id.includes("tel")){
 if(v.length==11)e.target.value=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
 }
 });
-
-// PDF
-function gerarPDF(e){
-e.preventDefault();
-
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
-
-let numero=document.getElementById("numeroColeta").innerText;
-let nome=document.getElementById("nome").value;
-let cpf=document.getElementById("cpf").value;
-let tel=document.getElementById("telefone").value;
-let cidade=document.getElementById("cidade").value;
-let cep=document.getElementById("cep").value;
-let volumes=document.getElementById("volumes").value;
-let peso=document.getElementById("peso").value;
-
-// LOGO
-const img=new Image();
-img.src="logo-azulcargo.png";
-
-img.onload=function(){
-
-// CABEÇALHO
-doc.addImage(img,'PNG',10,5,50,20);
-doc.setFontSize(12);
-doc.text("MINUTA DE DESPACHO DE CARGA",105,15,null,null,"center");
-
-doc.setTextColor(255,0,0);
-doc.text(numero,160,15);
-doc.setTextColor(0,0,0);
-
-// CAIXA DESTINATARIO
-doc.rect(10,30,190,40);
-doc.text("DESTINATÁRIO",12,35);
-doc.text("Nome: "+nome,12,45);
-doc.text("CPF/CNPJ: "+cpf,12,55);
-doc.text("Telefone: "+tel,110,55);
-doc.text("Cidade: "+cidade,12,65);
-doc.text("CEP: "+cep,110,65);
-
-// CARGA
-doc.rect(10,75,190,25);
-doc.text("INFORMAÇÕES DA CARGA",12,80);
-doc.text("Volumes: "+volumes,12,90);
-doc.text("Peso: "+peso+" kg",110,90);
-
-// NOVA PAGINA (DECLARAÇÃO)
-doc.addPage();
-
-doc.setFontSize(9);
-doc.text(`Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento, responsabilizando-me por eventuais atrasos ou prejuizos decorrentes de informações incorretas ou incompletas nesta minuta.
-
-Declaro que: O(s) volume(s) foi(foram) submetido(s) a controles de segurança apropriados até o momento da entrega à Azul Linhas Aereas Brasileiras S.A...
-
-Afirmo que NÃO CONTEM itens proibidos para transporte pela Azul.`,10,20,{maxWidth:190});
-
-doc.save("minuta.pdf");
-}
-}
-
 </script>
 
 </body>

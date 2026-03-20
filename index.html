@@ -7,21 +7,16 @@
 <title>Minuta Azul</title>
 
 <style>
-body {
-font-family: Arial;
-background:#eee;
-margin:0;
-}
+body { font-family: Arial; background:#eee; }
 
 .page {
 width:210mm;
-min-height:297mm;
 margin:auto;
-background:white;
+background:#fff;
 padding:5mm;
-box-sizing:border-box;
 }
 
+/* TABELA */
 table {
 width:100%;
 border-collapse:collapse;
@@ -31,54 +26,39 @@ font-size:12.5px;
 td {
 border:1px solid #000;
 padding:4px;
-vertical-align:middle;
 }
 
+/* BARRA AZUL */
 .header {
 background:#0b2d5c;
-color:white;
+color:#fff;
 font-weight:bold;
 }
 
-.center { text-align:center; }
-.right { text-align:right; }
-
-input {
+/* CAMPOS */
+input, select {
 width:100%;
 border:none;
-background:transparent;
+background:#dbe5f1;
+font-weight:bold;
 font-size:12.5px;
 outline:none;
 }
 
-.logo {
-height:55px;
-}
-
+/* BOTÕES */
 button {
 width:100%;
 padding:12px;
-margin-top:6px;
+margin-top:5px;
 border:none;
-color:white;
-cursor:pointer;
+color:#fff;
+background:#0b2d5c;
 }
 
-.btn-print { background:#0b2d5c; }
-.btn-pdf { background:#444; }
-
-@media(max-width:768px){
-.page { width:100%; }
-}
-
-@media print{
-body { background:white; }
+/* PRINT */
+@media print {
 button { display:none; }
-
-@page {
-size:A4;
-margin:5mm;
-}
+@page { size:A4; margin:5mm; }
 }
 </style>
 
@@ -88,20 +68,17 @@ margin:5mm;
 
 <div class="page">
 
-<!-- TOPO -->
 <table>
 <tr>
 <td style="width:30%">
-<img src="logo-azulcargo.png" class="logo">
+<img src="logo-azulcargo.png" style="height:60px;">
 </td>
 
-<td class="center">
-<b>MINUTA DE DESPACHO DE CARGA</b>
-</td>
+<td style="text-align:center"><b>MINUTA DE DESPACHO DE CARGA</b></td>
 
-<td class="right">
+<td style="text-align:right">
 <b>Nº DA COLETA</b><br>
-<span id="numero" style="color:red;font-weight:bold;"></span>
+<input id="numero">
 </td>
 </tr>
 </table>
@@ -131,13 +108,61 @@ margin:5mm;
 <table>
 <tr><td colspan="6" class="header">3. FORMA DE ENTREGA</td></tr>
 <tr>
-<td><input type="radio" name="ent"></td><td>Entrega no endereço</td>
-<td><input type="radio" name="ent"></td><td>Retirada no local</td>
-<td><input type="radio" name="ent"></td><td>Retirada no aeroporto</td>
+<td><input type="radio" name="ent" onclick="toggleAeroporto(false)"></td><td>Entrega no endereço</td>
+<td><input type="radio" name="ent" onclick="toggleAeroporto(false)"></td><td>Retirada no local</td>
+<td><input type="radio" name="ent" onclick="toggleAeroporto(true)"></td><td>Retirada no aeroporto</td>
+</tr>
+
+<tr id="aeroportoRow" style="display:none">
+<td colspan="2">Local retirada</td>
+<td colspan="4">
+<input list="listaAeroportos" placeholder="Digite o código">
+<datalist id="listaAeroportos">
+<option value="GRU">
+<option value="CGH">
+<option value="VCP">
+<option value="BSB">
+<option value="CNF">
+<option value="CWB">
+<option value="REC">
+<option value="SSA">
+<option value="GIG">
+<option value="POA">
+<option value="FOR">
+<option value="MAO">
+<option value="BEL">
+<option value="NAT">
+<option value="MCZ">
+<option value="JPA">
+<option value="SLZ">
+<option value="THE">
+<option value="VIX">
+<option value="UDI">
+<option value="RAO">
+<option value="PVH">
+<option value="IGU">
+<option value="XAP">
+<option value="LDB">
+<option value="JDO">
+<option value="STM">
+<option value="MCP">
+<option value="BVB">
+<option value="BVH">
+<option value="AJU">
+<option value="IOS">
+<option value="CXJ">
+<option value="JOI">
+<option value="URG">
+<option value="VAG">
+<option value="VIN02">
+<option value="VAL02">
+<option value="ZBW01">
+</datalist>
+</td>
 </tr>
 </table>
 
-<!-- REMETENTE / DESTINATARIO -->
+<!-- REMETENTE / DESTINATÁRIO -->
 <table>
 <tr>
 <td colspan="3" class="header">REMETENTE</td>
@@ -209,20 +234,19 @@ margin:5mm;
 <td colspan="2">Declaração de conteúdo - Valor declarado (R$)</td>
 <td colspan="3"><input id="valor2" value="R$ 0,00"></td>
 </tr>
-
 </table>
 
-<!-- DECLARAÇÃO -->
+<!-- DECLARAÇÃO COMPLETA -->
 <table>
 <tr><td class="header">DECLARAÇÃO</td></tr>
 <tr>
 <td style="font-size:10px">
-Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
+Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento, responsabilizando-me por eventuais atrasos ou prejuizos decorrentes de informações incorretas ou incompletas nesta minuta. Declaro que: O(s) volume(s) foi(foram) submetido(s) a controles de segurança apropriados até o momento da entrega à Azul Linhas Aereas Brasileiras S.A...
 </td>
 </tr>
 </table>
 
-<!-- RESPONSAVEL -->
+<!-- RESPONSÁVEL -->
 <table>
 <tr><td colspan="4" class="header">RESPONSÁVEL</td></tr>
 
@@ -235,66 +259,54 @@ Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) confor
 <td>RG</td><td><input id="rg"></td>
 <td>Nome</td><td><input></td>
 </tr>
-
 </table>
 
-<button class="btn-print" onclick="window.print()">IMPRIMIR</button>
-<button class="btn-pdf" onclick="gerarPDF()">GERAR PDF</button>
+<button onclick="window.print()">IMPRIMIR</button>
+<button onclick="gerarPDF()">GERAR PDF</button>
 
 </div>
 
-<!-- LIB PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <script>
 
-// NUMERO
-const numeroGerado = new Date().getFullYear()+""+Math.floor(Math.random()*100000);
-document.getElementById("numero").innerText = numeroGerado;
+// MOSTRAR AEROPORTO
+function toggleAeroporto(show){
+document.getElementById("aeroportoRow").style.display = show ? "" : "none";
+}
 
-// FORMATADOR GLOBAL
-document.addEventListener("blur", function(e){
-if(!e.target.value) return;
-
-let v = e.target.value.replace(/\D/g,'');
+// FORMATOS
+document.addEventListener("blur",function(e){
+let v=e.target.value.replace(/\D/g,'');
 
 if(e.target.id.includes("cpf") || e.target.id.includes("cnpj")){
-if(v.length <= 11){
-e.target.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-}else if(v.length == 14){
-e.target.value = v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-}
+if(v.length<=11)e.target.value=v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+else e.target.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
 }
 
 if(e.target.id.includes("tel")){
-e.target.value = v.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
+e.target.value=v.replace(/(\d{2})(\d{4,5})(\d{4})/,'($1) $2-$3');
 }
 
 if(e.target.id.includes("cep")){
-e.target.value = v.replace(/(\d{5})(\d{3})/, '$1-$2');
+e.target.value=v.replace(/(\d{5})(\d{3})/,'$1-$2');
 }
 
-if(e.target.id == "data"){
-if(v.length == 8){
-e.target.value = v.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
-}
+if(e.target.id=="data"){
+if(v.length==8)e.target.value=v.replace(/(\d{2})(\d{2})(\d{4})/,'$1/$2/$3');
 }
 
-if(e.target.id == "rg"){
-if(v.length >= 8){
-e.target.value = v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
-}
+if(e.target.id=="rg"){
+if(v.length>=8)e.target.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/,'$1.$2.$3-$4');
 }
 
-}, true);
+},true);
 
 // MOEDA
 function moeda(el){
-let v = el.value.replace(/\D/g,'');
-v = (v/100).toFixed(2)+'';
-v = v.replace(".",",");
-v = v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
-el.value = "R$ " + v;
+let v=el.value.replace(/\D/g,'');
+v=(v/100).toFixed(2)+'';
+v=v.replace(".",",");
+v=v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
+el.value="R$ "+v;
 }
 
 document.getElementById("valor").onblur=function(){moeda(this)};
@@ -302,20 +314,16 @@ document.getElementById("valor2").onblur=function(){moeda(this)};
 
 // PDF
 function gerarPDF(){
-const element = document.querySelector(".page");
-
-const opt = {
-margin: 5,
-filename: 'minuta_' + numeroGerado + '.pdf',
-image: { type: 'jpeg', quality: 1 },
-html2canvas: { scale: 2 },
-jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-};
-
-html2pdf().set(opt).from(element).save();
+html2pdf().set({
+filename:'minuta_'+(document.getElementById("numero").value||"sem_numero")+'.pdf',
+html2canvas:{scale:2},
+jsPDF:{unit:'mm',format:'a4'}
+}).from(document.querySelector(".page")).save();
 }
 
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
 </html>

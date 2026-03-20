@@ -7,7 +7,6 @@
 <title>Minuta Azul</title>
 
 <style>
-
 *{
 -webkit-print-color-adjust: exact !important;
 print-color-adjust: exact !important;
@@ -19,7 +18,6 @@ background:#eee;
 font-family:Arial;
 }
 
-/* A4 FIXO */
 .page {
 width:210mm;
 height:297mm;
@@ -30,7 +28,6 @@ box-sizing:border-box;
 overflow:hidden;
 }
 
-/* TABELA */
 table {
 width:100%;
 border-collapse:collapse;
@@ -42,14 +39,12 @@ border:1px solid #000;
 padding:5px;
 }
 
-/* HEADER */
 .header {
 background:#0b2d5c;
 color:#fff;
 font-weight:bold;
 }
 
-/* CAMPOS */
 input {
 width:100%;
 border:none;
@@ -58,7 +53,6 @@ font-weight:bold;
 outline:none;
 }
 
-/* BOTÃO */
 button {
 width:100%;
 padding:12px;
@@ -66,34 +60,17 @@ margin-top:5px;
 background:#0b2d5c;
 color:#fff;
 border:none;
-cursor:pointer;
 }
 
-/* IMPRESSÃO */
 @page {
 size:A4 portrait;
 margin:0;
 }
 
 @media print {
-
-body {
-background:#fff;
+body { background:#fff; }
+button { display:none; }
 }
-
-.page {
-width:210mm;
-height:297mm;
-margin:0;
-padding:5mm;
-}
-
-button {
-display:none;
-}
-
-}
-
 </style>
 </head>
 
@@ -111,46 +88,7 @@ display:none;
 
 <td style="text-align:right">
 <b>Nº DA COLETA</b><br>
-<input id="numero">
-</td>
-</tr>
-</table>
-
-<!-- SERVIÇO -->
-<table>
-<tr><td colspan="8" class="header">1. TIPO DE SERVIÇO</td></tr>
-<tr>
-<td><input type="radio" name="servico"></td><td>Expresso</td>
-<td><input type="radio" name="servico"></td><td>Premium</td>
-<td><input type="radio" name="servico"></td><td>Ecommerce</td>
-<td><input type="radio" name="servico"></td><td>Standard</td>
-</tr>
-</table>
-
-<!-- PAGAMENTO -->
-<table>
-<tr><td colspan="6" class="header">2. PAGAMENTO DO FRETE</td></tr>
-<tr>
-<td><input type="radio" name="pg"></td><td>Pago na origem</td>
-<td><input type="radio" name="pg"></td><td>Cliente correntista</td>
-<td>CNPJ</td><td><input></td>
-</tr>
-</table>
-
-<!-- ENTREGA -->
-<table>
-<tr><td colspan="6" class="header">3. FORMA DE ENTREGA</td></tr>
-<tr>
-<td><input type="radio" name="ent" onclick="toggleAeroporto(false)"></td><td>Entrega no endereço</td>
-<td><input type="radio" name="ent" onclick="toggleAeroporto(false)"></td><td>Retirada no local</td>
-<td><input type="radio" name="ent" onclick="toggleAeroporto(true)"></td><td>Retirada no aeroporto</td>
-</tr>
-
-<tr id="aeroportoRow" style="display:none">
-<td colspan="2">Local retirada</td>
-<td colspan="4">
-<input list="listaAeroportos">
-<datalist id="listaAeroportos"></datalist>
+<input>
 </td>
 </tr>
 </table>
@@ -173,8 +111,10 @@ display:none;
 </tr>
 
 <tr>
-<td>Endereço</td><td colspan="2"><input></td>
-<td>Endereço</td><td colspan="2"><input></td>
+<td>Endereço</td><td><input></td>
+<td>Nº</td>
+<td>Endereço</td><td><input></td>
+<td>Nº</td>
 </tr>
 
 <tr>
@@ -195,20 +135,6 @@ display:none;
 <tr>
 <td>Telefone</td><td colspan="2"><input></td>
 <td>Telefone</td><td colspan="2"><input></td>
-</tr>
-</table>
-
-<!-- CARGA -->
-<table>
-<tr><td colspan="6" class="header">INFORMAÇÕES DA CARGA</td></tr>
-<tr>
-<td>Volumes</td><td><input></td>
-<td>Peso (kg)</td><td><input></td>
-<td>Dimensões</td><td><input></td>
-</tr>
-<tr>
-<td>Tipo de embalagem</td><td colspan="2"><input></td>
-<td>Descrição</td><td colspan="2"><input></td>
 </tr>
 </table>
 
@@ -217,24 +143,26 @@ display:none;
 <tr><td colspan="6" class="header">DOCUMENTAÇÃO</td></tr>
 
 <tr>
-<td><input type="radio" name="doc"></td>
+<td><input type="radio"></td>
 <td colspan="2">Nota fiscal - Valor (R$)</td>
-<td colspan="3"><input value="R$ 0,00"></td>
+<td colspan="3"><input id="valor"></td>
 </tr>
 
 <tr>
-<td><input type="radio" name="doc"></td>
+<td><input type="radio"></td>
 <td colspan="2">Declaração de conteúdo - Valor declarado (R$)</td>
-<td colspan="3"><input value="R$ 0,00"></td>
+<td colspan="3"><input id="valor2"></td>
 </tr>
 </table>
 
-<!-- DECLARAÇÃO -->
+<!-- DECLARAÇÃO COMPLETA -->
 <table>
 <tr><td class="header">DECLARAÇÃO</td></tr>
 <tr>
-<td style="font-size:10px">
-Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
+<td style="font-size:10px; text-align:justify">
+
+Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento, responsabilizando-me por eventuais atrasos ou prejuizos decorrentes de informações incorretas ou incompletas nesta minuta. Declaro que: O(s) volume(s) foi(foram) submetido(s) a controles de segurança apropriados até o momento da entrega à Azul Linhas Aereas Brasileiras S.A. Até o momento da entrega à Azul Linhas Aereas Brasileiras S.A., o(s) volume(s) foi(foram) manuseados por pessoas devidamente autorizadas e treinadas para identificar artigos proibidos e/ou perigosos para o transporte aéreo, e nenhum deles apresenta historico criminal junto às autoridades policiais. O(s) volume(s) foi(foram) devidamente conferido(s) e inspecionado(s) e está(ão) de acordo com a descrição contida no documento fiscal correspondente, cujas informações integrarão o Conhecimento Aéreo-AWB. O(s) volume(s) está(ão) acondicionado(s) em embalagem(ns) adequada(s) para garantir a sua preservação durante o transporte até sua entrega ao destinatario. Quaisquer irregularidades identificadas no(s) volume(s) serão imediatamente comunicadas à Azul Linhas Aereas Brasileiras S.A. Afirmo que o(s) volume(s) apresentado(s) NÃO CONTEM nenhum dos itens abaixo, pois estou ciente de que são PROIBIDOS PARA TRANSPORTE PELA AZUL. Artigo Perigoso à segurança do transporte aereo (conforme classificação da ONU). Documento de Licitação; Animal Vivo; Carga Valor (acima de R$ 5.000,00/kg) ou Vulneravel, sem autorização prévia da Azul Cargo para aceitação.
+
 </td>
 </tr>
 </table>
@@ -249,34 +177,42 @@ Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) confor
 </tr>
 
 <tr>
-<td>RG</td><td><input></td>
+<td>RG</td><td><input id="rg"></td>
 <td>Nome</td><td><input></td>
 </tr>
 </table>
 
-<button onclick="imprimir()">IMPRIMIR / GERAR PDF</button>
+<button onclick="window.print()">IMPRIMIR / PDF</button>
 
 </div>
 
 <script>
 
-// AEROPORTOS COMPLETOS
-const aeroportos = `AAX,AFL,AFLH1,AIF01,AIR,AJA02,AJU,ANA01,APD01,APQ01,APS02,APS03,AQA,ARM01,ARU,ATM,AXE01,BAC01,BEL,BELT1,BFH,BGV03,BHZ01,BHZ04,BHZ05,BNU02,BPG,BPS,BRA,BSB,BSB01,BSB02,BSB04,BVB,BVH,BVJ01,BVS,CAC,CAC01,CAU,CAU01,CAW01,CAX,CBA,CBW,CCI01,CDSP1,CDSP2,CDSP3,CDSP4,CEL,CFB,CGB,CGB04,CGB05,CGBT2,CGH,CGR,CGR01,CGRT1,CIZ,CKS,CLV,CMG,CNF,CNFT1,CPQ05,CPV,CSG01,CSU,CTG02,CWB,CWB05,CWBT1,CWBT2,CXJ,CXJ03,DIQ,DOU,DOUT1,DSO01,ERM,FEC,FEN,FLN,FLN01,FLNT2,FOR,FOR07,FORH8,FRC,GEL,GGB,GIG,GNM02,GPB,GRU,GRU03,GRUT1,GUI01,GVR,GXP01,GYN,HTA01,IDT01,IGU,IGU01,IJU02,IMP,IOS,IPN,ITB,ITG01,ITR01,IZA,JAC02,JAU02,JDO,JDR,JIA,JJD,JJG,JOI,JPA,JPA01,JPA04,JPE,JPO,JPR,JTC,JTN01,JUU01,LAJ01,LAZ,LDB,LDBT1,LFR02,LHNT1,LVR01,MAB,MAO,MAO01,MCP,MCZ,MCZH1,MEA,MEU,MGF,MII,MMA01,MMM01,MOC,MVF,NAT,NAT01,NIT03,NNS01,NVM01,NVT,NVV01,OAL,OLL01,OPP,OPS,PCW01,PDM01,PET,PFB,PGZ,PHB,PIL01,PLU,PMW,PMWT1,PNG01,PNZ,POA,POA01,POA03,POARC,POO01,PPB,PPY03,PSW01,PVH,PVH01,PVH02,QAK01,QBU01,QBX01,QCC01,QCD01,QCJ01,QDS01,QDV01,QDW03,QET02,QEV01,QGA01,QGB01,QGF01,QGP,QHB01,QHP01,QHV01,QIQ03,QIU01,QJA03,QJD01,QJF01,QJG01,QJH01,QJM01,QKA02,QKAT1,QKK01,QLB03,QLL01,QLY01,QMI02,QMO01,QNS02,QNV01,QOC03,QOC04,QPA02,QPB01,QPT01,QPV01,QPY01,QRV01,QSA01,QSC01,QSE02,QTB01,QVH02,QWJ01,QXD,QXM01,RAO,RBR,REC,REC04,REC05,RECT1,RIA,RIOT1,RIOT2,RIOT4,RODT1,ROO,RTF01,RVD,SAO09,SAO25,SAO30,SAO31,SDU,SER03,SJK,SJP,SLA01,SLZ,SMT,SOD03,SRR01,SSA,SSA02,SSAH1,SSAT3,SSZ01,STC01,STM,SUM02,TBT,TFF,TGQ,THE,TJL,TLZ01,TOW,TUR,TXF,UBA,UBX01,UDI,UMU,URG,UVI,VAG,VAL02,VCP,VDC,VIN02,VIX,VIX01,VPA02,VTM01,XAP,XAP01,ZBW01`.split(",");
-
-const lista = document.getElementById("listaAeroportos");
-aeroportos.forEach(a=>{
-let op=document.createElement("option");
-op.value=a;
-lista.appendChild(op);
+// FORMATO CONTÁBIL R$
+function formatarMoeda(campo){
+campo.addEventListener("input", function(){
+let v = this.value.replace(/\D/g,"");
+v = (v/100).toFixed(2) + "";
+v = v.replace(".",",");
+v = v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
+this.value = "R$ " + v;
 });
-
-function toggleAeroporto(v){
-document.getElementById("aeroportoRow").style.display = v ? "" : "none";
 }
 
-function imprimir(){
-window.print();
-}
+formatarMoeda(document.getElementById("valor"));
+formatarMoeda(document.getElementById("valor2"));
+
+// FORMATO RG
+document.getElementById("rg").addEventListener("input", function(){
+let v = this.value.replace(/\D/g,"");
+if(v.length > 9) v = v.slice(0,9);
+
+v = v.replace(/(\d{2})(\d)/, "$1.$2");
+v = v.replace(/(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+v = v.replace(/(\d{2})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
+
+this.value = v;
+});
 
 </script>
 

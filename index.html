@@ -84,8 +84,7 @@ margin:5mm;
 </td>
 
 <td class="center">
-<b>MINUTA DE DESPACHO DE CARGA</b><br>
-<span style="font-size:10px">Modelo protegido</span>
+<b>MINUTA DE DESPACHO DE CARGA</b>
 </td>
 
 <td class="right">
@@ -187,17 +186,15 @@ margin:5mm;
 <tr><td colspan="6" class="header">DOCUMENTAÇÃO</td></tr>
 
 <tr>
-<td><input type="radio" name="doc"></td>
-<td>Nota fiscal</td>
-<td>Valor (R$)</td>
-<td><input id="valor"></td>
-<td>Valor declarado (R$)</td>
-<td><input id="valor2"></td>
+<td style="width:30px;"><input type="radio" name="doc"></td>
+<td colspan="2">Nota fiscal - Valor (R$)</td>
+<td colspan="3"><input id="valor" value="R$ 0,00"></td>
 </tr>
 
 <tr>
 <td><input type="radio" name="doc"></td>
-<td colspan="5">Declaração de conteúdo</td>
+<td colspan="2">Declaração de conteúdo - Valor declarado (R$)</td>
+<td colspan="3"><input id="valor2" value="R$ 0,00"></td>
 </tr>
 
 </table>
@@ -240,29 +237,59 @@ IMPRIMIR
 document.getElementById("numero").innerText =
 new Date().getFullYear()+""+Math.floor(Math.random()*100000);
 
-// DATA
-document.getElementById("data").addEventListener("blur", function(){
-let v=this.value.replace(/\D/g,'');
-if(v.length==8){
-this.value=v.replace(/(\d{2})(\d{2})(\d{4})/,'$1/$2/$3');
+// FORMATADOR GLOBAL
+document.addEventListener("blur", function(e){
+if(!e.target.value) return;
+
+let v = e.target.value.replace(/\D/g,'');
+
+// CPF/CNPJ
+if(e.target.id.includes("cpf") || e.target.id.includes("cnpj")){
+if(v.length <= 11){
+e.target.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
 }
-});
+else if(v.length == 14){
+e.target.value = v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+}
+}
+
+// TELEFONE
+if(e.target.id.includes("tel")){
+if(v.length >= 10){
+e.target.value = v.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
+}
+}
+
+// CEP
+if(e.target.id.includes("cep")){
+if(v.length == 8){
+e.target.value = v.replace(/(\d{5})(\d{3})/, '$1-$2');
+}
+}
+
+// DATA
+if(e.target.id == "data"){
+if(v.length == 8){
+e.target.value = v.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+}
+}
 
 // RG
-document.getElementById("rg").addEventListener("blur", function(){
-let v=this.value.replace(/\D/g,'');
-if(v.length>=8){
-this.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/,'$1.$2.$3-$4');
+if(e.target.id == "rg"){
+if(v.length >= 8){
+e.target.value = v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
 }
-});
+}
+
+}, true);
 
 // MOEDA
 function moeda(el){
-let v=el.value.replace(/\D/g,'');
-v=(v/100).toFixed(2)+'';
-v=v.replace(".",",");
-v=v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
-el.value="R$ "+v;
+let v = el.value.replace(/\D/g,'');
+v = (v/100).toFixed(2)+'';
+v = v.replace(".",",");
+v = v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
+el.value = "R$ " + v;
 }
 
 document.getElementById("valor").onblur=function(){moeda(this)};

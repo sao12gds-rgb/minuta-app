@@ -6,13 +6,15 @@
 <title>Minuta Azul</title>
 
 <style>
-body { font-family: Arial; background:#eee; }
+body { font-family: Arial; background:#eee; margin:0; }
 
 .page {
 width:210mm;
+min-height:297mm;
 margin:auto;
 background:#fff;
 padding:5mm;
+box-sizing:border-box;
 }
 
 table {
@@ -24,6 +26,7 @@ font-size:13px;
 td {
 border:1px solid #000;
 padding:5px;
+vertical-align:middle;
 }
 
 .header {
@@ -48,11 +51,27 @@ margin-top:5px;
 border:none;
 color:#fff;
 background:#0b2d5c;
+cursor:pointer;
+}
+
+/* PRINT CORRETO */
+@page {
+size: A4 portrait;
+margin: 0;
 }
 
 @media print {
+body { background:#fff; }
+
+.page {
+width:210mm;
+height:297mm;
+margin:0;
+padding:5mm;
+box-sizing:border-box;
+}
+
 button { display:none; }
-@page { size:A4; margin:5mm; }
 }
 </style>
 </head>
@@ -76,7 +95,6 @@ button { display:none; }
 </tr>
 </table>
 
-<!-- SERVIÇO -->
 <table>
 <tr><td colspan="8" class="header">1. TIPO DE SERVIÇO</td></tr>
 <tr>
@@ -87,7 +105,6 @@ button { display:none; }
 </tr>
 </table>
 
-<!-- PAGAMENTO -->
 <table>
 <tr><td colspan="6" class="header">2. PAGAMENTO DO FRETE</td></tr>
 <tr>
@@ -97,7 +114,6 @@ button { display:none; }
 </tr>
 </table>
 
-<!-- ENTREGA -->
 <table>
 <tr><td colspan="6" class="header">3. FORMA DE ENTREGA</td></tr>
 <tr>
@@ -115,7 +131,6 @@ button { display:none; }
 </tr>
 </table>
 
-<!-- REMETENTE / DESTINATÁRIO -->
 <table>
 <tr>
 <td colspan="3" class="header">REMETENTE</td>
@@ -158,7 +173,6 @@ button { display:none; }
 </tr>
 </table>
 
-<!-- CARGA -->
 <table>
 <tr><td colspan="6" class="header">INFORMAÇÕES DA CARGA</td></tr>
 <tr>
@@ -172,7 +186,6 @@ button { display:none; }
 </tr>
 </table>
 
-<!-- DOCUMENTAÇÃO -->
 <table>
 <tr><td colspan="6" class="header">DOCUMENTAÇÃO</td></tr>
 
@@ -189,17 +202,15 @@ button { display:none; }
 </tr>
 </table>
 
-<!-- DECLARAÇÃO -->
 <table>
 <tr><td class="header">DECLARAÇÃO</td></tr>
 <tr>
 <td style="font-size:10px">
-Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento, responsabilizando-me por eventuais atrasos ou prejuizos decorrentes de informações incorretas ou incompletas nesta minuta...
+Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento, responsabilizando-me por eventuais atrasos ou prejuizos decorrentes de informações incorretas ou incompletas nesta minuta. Declaro que: O(s) volume(s) foi(foram) submetido(s) a controles de segurança apropriados até o momento da entrega à Azul Linhas Aereas Brasileiras S.A...
 </td>
 </tr>
 </table>
 
-<!-- RESPONSÁVEL -->
 <table>
 <tr><td colspan="4" class="header">RESPONSÁVEL</td></tr>
 
@@ -231,12 +242,11 @@ op.value=a;
 lista.appendChild(op);
 });
 
-// MOSTRAR AEROPORTO
 function toggleAeroporto(v){
 document.getElementById("aeroportoRow").style.display = v ? "" : "none";
 }
 
-// FORMATOS
+// FORMATAÇÕES
 document.addEventListener("blur",function(e){
 let v=e.target.value.replace(/\D/g,'');
 
@@ -263,7 +273,6 @@ if(v.length>=8)e.target.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/,'$1.$2.$3
 
 },true);
 
-// MOEDA
 function moeda(el){
 let v=el.value.replace(/\D/g,'');
 v=(v/100).toFixed(2)+'';
@@ -275,12 +284,12 @@ el.value="R$ "+v;
 document.getElementById("valor").onblur=function(){moeda(this)};
 document.getElementById("valor2").onblur=function(){moeda(this)};
 
-// PDF
 function gerarPDF(){
 html2pdf().set({
+margin:0,
 filename:'minuta_'+(document.getElementById("numero").value||"sem_numero")+'.pdf',
-html2canvas:{scale:2},
-jsPDF:{unit:'mm',format:'a4'}
+html2canvas:{scale:3},
+jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
 }).from(document.querySelector(".page")).save();
 }
 </script>

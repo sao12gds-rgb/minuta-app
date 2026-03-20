@@ -7,7 +7,11 @@
 <title>Minuta Azul</title>
 
 <style>
-body { font-family: Arial; background:#eee; margin:0; }
+body {
+font-family: Arial;
+background:#eee;
+margin:0;
+}
 
 .page {
 width:210mm;
@@ -18,7 +22,11 @@ padding:5mm;
 box-sizing:border-box;
 }
 
-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+table {
+width:100%;
+border-collapse:collapse;
+font-size:12.5px;
+}
 
 td {
 border:1px solid #000;
@@ -32,16 +40,20 @@ color:white;
 font-weight:bold;
 }
 
-input, select {
+.center { text-align:center; }
+.right { text-align:right; }
+
+input {
 width:100%;
 border:none;
 background:transparent;
 font-size:12.5px;
-font-weight:bold;
 outline:none;
 }
 
-.logo { height:55px; }
+.logo {
+height:55px;
+}
 
 button {
 width:100%;
@@ -55,9 +67,18 @@ cursor:pointer;
 .btn-print { background:#0b2d5c; }
 .btn-pdf { background:#444; }
 
+@media(max-width:768px){
+.page { width:100%; }
+}
+
 @media print{
+body { background:white; }
 button { display:none; }
-@page { size:A4; margin:5mm; }
+
+@page {
+size:A4;
+margin:5mm;
+}
 }
 </style>
 
@@ -74,13 +95,13 @@ button { display:none; }
 <img src="logo-azulcargo.png" class="logo">
 </td>
 
-<td style="text-align:center">
+<td class="center">
 <b>MINUTA DE DESPACHO DE CARGA</b>
 </td>
 
-<td style="text-align:right">
+<td class="right">
 <b>Nº DA COLETA</b><br>
-<input id="numero">
+<span id="numero" style="color:red;font-weight:bold;"></span>
 </td>
 </tr>
 </table>
@@ -96,25 +117,81 @@ button { display:none; }
 </tr>
 </table>
 
+<!-- PAGAMENTO -->
+<table>
+<tr><td colspan="6" class="header">2. PAGAMENTO DO FRETE</td></tr>
+<tr>
+<td><input type="radio" name="pg"></td><td>Pago na origem</td>
+<td><input type="radio" name="pg"></td><td>Cliente correntista</td>
+<td>CNPJ</td><td><input id="cnpj"></td>
+</tr>
+</table>
+
 <!-- ENTREGA -->
 <table>
 <tr><td colspan="6" class="header">3. FORMA DE ENTREGA</td></tr>
 <tr>
-<td><input type="radio" name="ent" onchange="toggleAeroporto(false)"></td><td>Entrega no endereço</td>
-<td><input type="radio" name="ent" onchange="toggleAeroporto(false)"></td><td>Retirada no local</td>
-<td><input type="radio" name="ent" onchange="toggleAeroporto(true)"></td><td>Retirada no aeroporto</td>
+<td><input type="radio" name="ent"></td><td>Entrega no endereço</td>
+<td><input type="radio" name="ent"></td><td>Retirada no local</td>
+<td><input type="radio" name="ent"></td><td>Retirada no aeroporto</td>
+</tr>
+</table>
+
+<!-- REMETENTE / DESTINATARIO -->
+<table>
+<tr>
+<td colspan="3" class="header">REMETENTE</td>
+<td colspan="3" class="header">DESTINATÁRIO</td>
 </tr>
 
-<tr id="campoAeroporto" style="display:none">
-<td colspan="2">Local retirada</td>
-<td colspan="4">
-<select>
-<option value="">Selecione</option>
-<option>AAX</option><option>AFL</option><option>GRU</option><option>CGH</option><option>VCP</option>
-</select>
-</td>
+<tr>
+<td>Nome</td><td colspan="2"><input></td>
+<td>Nome</td><td colspan="2"><input></td>
 </tr>
 
+<tr>
+<td>CPF/CNPJ</td><td colspan="2"><input id="cpf"></td>
+<td>CPF/CNPJ</td><td colspan="2"><input id="cpf2"></td>
+</tr>
+
+<tr>
+<td>Endereço</td><td colspan="2"><input></td>
+<td>Endereço</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>Compl.</td><td colspan="2"><input></td>
+<td>Compl.</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>Cidade</td><td colspan="2"><input></td>
+<td>Cidade</td><td colspan="2"><input></td>
+</tr>
+
+<tr>
+<td>CEP</td><td colspan="2"><input id="cep"></td>
+<td>CEP</td><td colspan="2"><input id="cep2"></td>
+</tr>
+
+<tr>
+<td>Telefone</td><td colspan="2"><input id="tel"></td>
+<td>Telefone</td><td colspan="2"><input id="tel2"></td>
+</tr>
+</table>
+
+<!-- CARGA -->
+<table>
+<tr><td colspan="6" class="header">INFORMAÇÕES DA CARGA</td></tr>
+<tr>
+<td>Volumes</td><td><input></td>
+<td>Peso</td><td><input></td>
+<td>Dimensões</td><td><input></td>
+</tr>
+<tr>
+<td>Tipo</td><td colspan="2"><input></td>
+<td>Descrição</td><td colspan="2"><input></td>
+</tr>
 </table>
 
 <!-- DOCUMENTAÇÃO -->
@@ -124,23 +201,23 @@ button { display:none; }
 <tr>
 <td><input type="radio" name="doc"></td>
 <td colspan="2">Nota fiscal - Valor (R$)</td>
-<td colspan="3"><input id="valor"></td>
+<td colspan="3"><input id="valor" value="R$ 0,00"></td>
 </tr>
 
 <tr>
 <td><input type="radio" name="doc"></td>
 <td colspan="2">Declaração de conteúdo - Valor declarado (R$)</td>
-<td colspan="3"><input id="valor2"></td>
+<td colspan="3"><input id="valor2" value="R$ 0,00"></td>
 </tr>
 
 </table>
 
-<!-- DECLARAÇÃO COMPLETA -->
+<!-- DECLARAÇÃO -->
 <table>
 <tr><td class="header">DECLARAÇÃO</td></tr>
 <tr>
 <td style="font-size:10px">
-Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento, responsabilizando-me por eventuais atrasos ou prejuizos decorrentes de informações incorretas ou incompletas nesta minuta. Declaro que: O(s) volume(s) foi(foram) submetido(s) a controles de segurança apropriados até o momento da entrega à Azul Linhas Aereas Brasileiras S.A. Até o momento da entrega à Azul Linhas Aereas Brasileiras S.A., o(s) volume(s) foi(foram) manuseados por pessoas devidamente autorizadas e treinadas para identificar artigos proibidos e/ou perigosos para o transporte aéreo, e nenhum deles apresenta historico criminal junto às autoridades policiais. O(s) volume(s) foi(foram) devidamente conferido(s) e inspecionado(s) e está(ão) de acordo com a descrição contida no documento fiscal correspondente, cujas informações integrarão o Conhecimento Aéreo-AWB. O(s) volume(s) está(ão) acondicionado(s) em embalagem(ns) adequada(s) para garantir a sua preservação durante o transporte até sua entrega ao destinatario. Quaisquer irregularidades identificadas no(s) volume(s) serão imediatamente comunicadas à Azul Linhas Aereas Brasileiras S.A. Afirmo que o(s) volume(s) apresentado(s) NÃO CONTEM nenhum dos itens proibidos.
+Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
 </td>
 </tr>
 </table>
@@ -148,14 +225,17 @@ Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) confor
 <!-- RESPONSAVEL -->
 <table>
 <tr><td colspan="4" class="header">RESPONSÁVEL</td></tr>
+
 <tr>
 <td>Local</td><td><input></td>
 <td>Data</td><td><input id="data"></td>
 </tr>
+
 <tr>
 <td>RG</td><td><input id="rg"></td>
 <td>Nome</td><td><input></td>
 </tr>
+
 </table>
 
 <button class="btn-print" onclick="window.print()">IMPRIMIR</button>
@@ -163,34 +243,58 @@ Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) confor
 
 </div>
 
+<!-- LIB PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <script>
 
-// AEROPORTO
-function toggleAeroporto(show){
-document.getElementById("campoAeroporto").style.display = show ? "" : "none";
+// NUMERO
+const numeroGerado = new Date().getFullYear()+""+Math.floor(Math.random()*100000);
+document.getElementById("numero").innerText = numeroGerado;
+
+// FORMATADOR GLOBAL
+document.addEventListener("blur", function(e){
+if(!e.target.value) return;
+
+let v = e.target.value.replace(/\D/g,'');
+
+if(e.target.id.includes("cpf") || e.target.id.includes("cnpj")){
+if(v.length <= 11){
+e.target.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}else if(v.length == 14){
+e.target.value = v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+}
 }
 
-// FORMATOS
-document.addEventListener("blur",function(e){
-let v=e.target.value.replace(/\D/g,'');
-
-if(e.target.id=="data"){
-if(v.length==8)e.target.value=v.replace(/(\d{2})(\d{2})(\d{4})/,'$1/$2/$3');
+if(e.target.id.includes("tel")){
+e.target.value = v.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
 }
 
-if(e.target.id=="rg"){
-if(v.length>=8)e.target.value=v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/,'$1.$2.$3-$4');
+if(e.target.id.includes("cep")){
+e.target.value = v.replace(/(\d{5})(\d{3})/, '$1-$2');
 }
 
-},true);
+if(e.target.id == "data"){
+if(v.length == 8){
+e.target.value = v.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+}
+}
+
+if(e.target.id == "rg"){
+if(v.length >= 8){
+e.target.value = v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
+}
+}
+
+}, true);
 
 // MOEDA
 function moeda(el){
-let v=el.value.replace(/\D/g,'');
-v=(v/100).toFixed(2)+'';
-v=v.replace(".",",");
-v=v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
-el.value="R$ "+v;
+let v = el.value.replace(/\D/g,'');
+v = (v/100).toFixed(2)+'';
+v = v.replace(".",",");
+v = v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
+el.value = "R$ " + v;
 }
 
 document.getElementById("valor").onblur=function(){moeda(this)};
@@ -198,18 +302,20 @@ document.getElementById("valor2").onblur=function(){moeda(this)};
 
 // PDF
 function gerarPDF(){
-const numero = document.getElementById("numero").value || "sem_numero";
+const element = document.querySelector(".page");
 
-html2pdf().set({
-filename: 'minuta_'+numero+'.pdf',
-html2canvas:{scale:2},
-jsPDF:{unit:'mm',format:'a4'}
-}).from(document.querySelector(".page")).save();
+const opt = {
+margin: 5,
+filename: 'minuta_' + numeroGerado + '.pdf',
+image: { type: 'jpeg', quality: 1 },
+html2canvas: { scale: 2 },
+jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+};
+
+html2pdf().set(opt).from(element).save();
 }
 
 </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
 </html>

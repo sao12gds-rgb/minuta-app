@@ -3,21 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <title>Minuta Azul</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { font-family: Arial; background:#f2f2f2; }
+body { font-family: Arial; background:#f2f2f2; margin:0; }
 
 .container {
-width: 1000px;
+max-width: 1000px;
 margin: auto;
 background: #fff;
 padding: 10px;
 }
 
+/* TOPO */
 .topo {
 display:flex;
 justify-content:space-between;
 align-items:center;
+flex-wrap:wrap;
+gap:10px;
 }
 
 .titulo {
@@ -26,29 +30,23 @@ font-weight:bold;
 flex:1;
 }
 
+/* BARRAS */
 .barra {
 background:#0b2d5c;
 color:#fff;
-padding:5px;
+padding:6px;
 margin-top:10px;
 font-size:13px;
 }
 
-.grid {
-display:grid;
-grid-template-columns: repeat(2, 1fr);
-gap:10px;
-}
+/* GRID */
+.grid { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+.grid3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; }
 
-.grid3 {
-display:grid;
-grid-template-columns: repeat(3, 1fr);
-gap:10px;
-}
-
+/* CAMPOS */
 .box {
 border:1px solid #000;
-padding:5px;
+padding:6px;
 background:#e6eef7;
 }
 
@@ -56,27 +54,58 @@ input {
 width:100%;
 border:none;
 background:transparent;
+font-size:14px;
+padding:6px;
 }
 
-.row {
-display:grid;
-grid-template-columns: 1fr 1fr 1fr;
-}
-
+/* BOTÃO */
 .print-btn {
-margin-top:10px;
-padding:10px;
+margin-top:15px;
+padding:14px;
 background:#0b2d5c;
 color:#fff;
 border:none;
 width:100%;
-cursor:pointer;
+font-size:16px;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+.grid, .grid3 { grid-template-columns: 1fr; }
+
+.topo { flex-direction:column; align-items:flex-start; }
+
+.titulo { text-align:left; font-size:16px; }
+
+input { font-size:16px; padding:10px; }
+
+.print-btn { font-size:18px; padding:16px; }
 }
 
 /* IMPRESSÃO */
 @media print {
+
 .print-btn { display:none; }
-body { background:#fff; }
+
+.container {
+width:100%;
+margin:0;
+padding:0;
+}
+
+@page {
+size:A4;
+margin:5mm;
+}
+
+/* força layout padrão */
+.grid { grid-template-columns:1fr 1fr !important; }
+.grid3 { grid-template-columns:1fr 1fr 1fr !important; }
+
+input {
+font-size:11px;
+padding:2px;
+}
 }
 </style>
 
@@ -104,7 +133,7 @@ body { background:#fff; }
 <div class="grid3">
 <label><input type="checkbox"> Pago na origem</label>
 <label><input type="checkbox"> Cliente correntista</label>
-<input placeholder="CNPJ">
+<input placeholder="CNPJ" inputmode="numeric">
 </div>
 
 <div class="barra">3. FORMA DE ENTREGA</div>
@@ -120,21 +149,23 @@ body { background:#fff; }
 <div>
 <div class="barra">REMETENTE</div>
 <div class="box"><input placeholder="Nome"></div>
-<div class="box"><input id="cpf_rem" placeholder="CPF/CNPJ"></div>
+<div class="box"><input id="cpf_rem" placeholder="CPF/CNPJ" inputmode="numeric"></div>
 <div class="box"><input placeholder="Endereço"></div>
+<div class="box"><input placeholder="Complemento"></div>
 <div class="box"><input placeholder="Cidade"></div>
-<div class="box"><input id="cep_rem" placeholder="CEP"></div>
-<div class="box"><input id="tel_rem" placeholder="Telefone"></div>
+<div class="box"><input id="cep_rem" placeholder="CEP" inputmode="numeric"></div>
+<div class="box"><input id="tel_rem" placeholder="Telefone" inputmode="numeric"></div>
 </div>
 
 <div>
 <div class="barra">DESTINATÁRIO</div>
 <div class="box"><input placeholder="Nome"></div>
-<div class="box"><input id="cpf" placeholder="CPF/CNPJ"></div>
+<div class="box"><input id="cpf" placeholder="CPF/CNPJ" inputmode="numeric"></div>
 <div class="box"><input placeholder="Endereço"></div>
+<div class="box"><input placeholder="Complemento"></div>
 <div class="box"><input placeholder="Cidade"></div>
-<div class="box"><input id="cep" placeholder="CEP"></div>
-<div class="box"><input id="tel" placeholder="Telefone"></div>
+<div class="box"><input id="cep" placeholder="CEP" inputmode="numeric"></div>
+<div class="box"><input id="tel" placeholder="Telefone" inputmode="numeric"></div>
 </div>
 
 </div>
@@ -143,8 +174,8 @@ body { background:#fff; }
 <div class="barra">TOMADOR (PAGADOR)</div>
 <div class="grid">
 <input placeholder="Nome">
-<input placeholder="CPF/CNPJ">
-<input placeholder="Telefone">
+<input placeholder="CPF/CNPJ" inputmode="numeric">
+<input placeholder="Telefone" inputmode="numeric">
 <input placeholder="E-mail">
 </div>
 
@@ -162,14 +193,14 @@ body { background:#fff; }
 <div class="barra">DOCUMENTAÇÃO DA CARGA</div>
 <div class="grid">
 <label><input type="checkbox"> Nota fiscal</label>
-<input placeholder="Valor (R$)">
+<input id="valor" placeholder="Valor (R$)">
 <label><input type="checkbox"> Declaração</label>
-<input placeholder="Valor declarado">
+<input id="valorDeclarado" placeholder="Valor declarado">
 </div>
 
 <!-- DECLARAÇÃO -->
 <div class="barra">DECLARAÇÃO</div>
-<div class="box" style="font-size:11px;">
+<div class="box" style="font-size:10px;">
 Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) conforme especificações acima neste documento...
 </div>
 
@@ -188,7 +219,7 @@ Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) confor
 
 <script>
 
-// NUMERO AUTOMATICO
+// NUMERO
 function gerarNumero(){
 const d=new Date();
 return d.getFullYear()+""+(d.getMonth()+1)+""+d.getDate()+""+d.getHours()+""+d.getMinutes()+Math.floor(Math.random()*100);
@@ -210,6 +241,19 @@ if(e.target.id.includes("tel")){
 if(v.length==11)e.target.value=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
 }
 });
+
+// MOEDA
+function formatMoeda(el){
+let v = el.value.replace(/\D/g,'');
+v = (v/100).toFixed(2) + '';
+v = v.replace(".", ",");
+v = v.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+el.value = "R$ " + v;
+}
+
+document.getElementById("valor").addEventListener("blur", function(){ formatMoeda(this); });
+document.getElementById("valorDeclarado").addEventListener("blur", function(){ formatMoeda(this); });
+
 </script>
 
 </body>

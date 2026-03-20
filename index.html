@@ -1,38 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Minuta de Embarque</title>
+<meta charset="UTF-8">
+<title>Minuta</title>
 </head>
+
 <body>
 
 <h2>MINUTA DE EMBARQUE</h2>
 
-<form action="/gerar" method="POST">
+<form onsubmit="gerarPDF(event)">
 
-<h3>Tipo de Serviço</h3>
-<select name="servico" required>
-  <option value="">Selecione</option>
-  <option>Expresso</option>
-  <option>Premium</option>
-  <option>Ecommerce</option>
+<input id="nome" placeholder="Nome" required><br><br>
+<input id="cpf" placeholder="CPF/CNPJ" required><br><br>
+<input id="cep" placeholder="CEP" required><br><br>
+<input id="telefone" placeholder="Telefone" required><br><br>
+
+<select id="servico">
+<option>Expresso</option>
+<option>Premium</option>
+<option>Ecommerce</option>
 </select>
 
-<h3>Destinatário</h3>
-<input name="nome" placeholder="Nome" required><br>
-<input name="cpf" placeholder="CPF/CNPJ" required><br>
-<input name="endereco" placeholder="Endereço" required><br>
-<input name="cep" placeholder="CEP" required><br>
-<input name="telefone" placeholder="Telefone" required><br>
+<br><br>
 
-<h3>Carga</h3>
-<input name="volumes" placeholder="Volumes" required><br>
-<input name="peso" placeholder="Peso (kg)" required><br>
-
-<br>
 <button type="submit">GERAR MINUTA</button>
 
 </form>
+
+<script>
+
+function gerarPDF(e){
+e.preventDefault();
+
+const nome = document.getElementById("nome").value;
+const cpf = document.getElementById("cpf").value;
+
+const conteudo = `
+MINUTA DE EMBARQUE
+
+Nome: ${nome}
+CPF/CNPJ: ${cpf}
+`;
+
+const blob = new Blob([conteudo], { type: "application/pdf" });
+const link = document.createElement("a");
+
+link.href = URL.createObjectURL(blob);
+link.download = "minuta.pdf";
+link.click();
+
+}
+
+</script>
 
 </body>
 </html>

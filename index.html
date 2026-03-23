@@ -102,30 +102,31 @@ height:297mm;
 </tr>
 </table>
 <!-- 2. PAGAMENTO DE FRETE E TOMADOR -->
-<div style="background-color: #1e4f91; color: white; padding: 5px; font-weight: bold; margin-top: 10px;">
-    2. PAGAMENTO DE FRETE / TOMADOR
-</div>
-<table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
+<!-- 2. PAGAMENTO DE FRETE / TOMADOR -->
+<div class="section-title">2. PAGAMENTO DE FRETE / TOMADOR</div>
+<table class="carga-table">
     <tr>
-        <td style="width: 20%; border: 1px solid black; padding: 5px;">Pagamento de Frete</td>
-        <td colspan="3" style="border: 1px solid black; padding: 5px; text-align: left;">
+        <td style="width: 20%;">Pagamento de Frete</td>
+        <td colspan="3" style="text-align: left; padding-left: 10px;">
             <label><input type="radio" name="frete" value="Pago na origem" checked> Pago na origem</label>  
 
             <label><input type="radio" name="frete" value="Cliente correntista"> Cliente correntista</label>
         </td>
-        <td style="width: 10%; border: 1px solid black; padding: 5px;">Tomador</td>
-        <td colspan="3" style="border: 1px solid black; padding: 5px; text-align: left;">
+        <td style="width: 10%;">Tomador</td>
+        <td colspan="3" style="text-align: left; padding-left: 10px;">
             <label><input type="radio" name="tomador" value="Remetente"> Remetente</label>  
 
             <label><input type="radio" name="tomador" value="Destinatário"> Destinatário</label>
         </td>
     </tr>
     <tr>
-        <td style="border: 1px solid black; padding: 5px;">CNPJ do Tomador</td>
-        <td colspan="7" style="border: 1px solid black; padding: 5px;">
-            <input class="cpf" name="cnpj_frete" maxlength="18" style="width: 100%;" placeholder="00.000.000/0000-00">
+        <td>CNPJ do Tomador</td>
+        <td colspan="7">
+            <input class="cpf" name="cnpj_frete" maxlength="18" placeholder="00.000.000/0000-00">
         </td>
     </tr>
+</table>
+
 </table>
 
 <table>
@@ -306,33 +307,51 @@ document.querySelectorAll(".cpf").forEach(el => {
 });
 
 // CNPJ
-// Função para controlar o campo CNPJ do frete/tomador
+<script>
+// 1. Máscara Inteligente CPF/CNPJ (para todos os campos .cpf)
+document.querySelectorAll('.cpf').forEach(el => {
+    el.addEventListener('input', () => {
+        let v = el.value.replace(/\D/g, '');
+        if (v.length <= 11) {
+            // Formato CPF
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        } else {
+            // Formato CNPJ
+            v = v.slice(0, 14);
+            v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+            v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+            v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+            v = v.replace(/(\d{4})(\d)/, "$1-$2");
+        }
+        el.value = v;
+    });
+});
+
+// 2. Lógica de Bloqueio do Campo de Frete
 const radiosFrete = document.querySelectorAll('input[name="frete"]');
 const campoCnpjFrete = document.querySelector('input[name="cnpj_frete"]');
 
 function atualizarEstadoFrete() {
     const selecionado = document.querySelector('input[name="frete"]:checked');
-    
     if (selecionado && selecionado.value === "Pago na origem") {
-        campoCnpjFrete.value = ""; // Limpa o campo
-        campoCnpjFrete.disabled = true; // Desativa o campo
-        campoCnpjFrete.style.backgroundColor = "#f0f0f0"; // Deixa cinza
+        campoCnpjFrete.value = ""; // Limpa
+        campoCnpjFrete.disabled = true; // Bloqueia
+        campoCnpjFrete.style.backgroundColor = "#f0f0f0"; // Cinza
     } else {
-        campoCnpjFrete.disabled = false; // Ativa o campo
-        campoCnpjFrete.style.backgroundColor = "white"; // Volta ao normal
+        campoCnpjFrete.disabled = false; // Libera
+        campoCnpjFrete.style.backgroundColor = "white"; // Branco
     }
 }
 
-// Escuta as mudanças nos botões de rádio do frete
+// Ativa os ouvintes de clique
 radiosFrete.forEach(r => r.addEventListener('change', atualizarEstadoFrete));
 
-// Executa uma vez ao carregar a página para definir o estado inicial
+// Executa ao carregar para o campo já começar bloqueado
 atualizarEstadoFrete();
+</script>
 
-
-// Inicializa o campo como desativado ao carregar a página
-document.querySelector('input[name="cnpj_frete"]').disabled = true;
-document.querySelector('input[name="cnpj_frete"]').style.backgroundColor = "#f0f0f0";
 // RG
 document.querySelectorAll(".rg").forEach(el=>{
 el.addEventListener("input",()=>{

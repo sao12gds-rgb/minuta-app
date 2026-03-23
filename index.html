@@ -514,5 +514,23 @@ v=v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
 el.value="R$ "+v;
 });
 });
+const docNotaFiscal = document.getElementById("docNotaFiscal");
+const linhaNumeroNota = document.getElementById("linhaNumeroNota");
+const inputNumeroNota = document.querySelector('input[name="numero_nota_fiscal"]');
+
+function toggleNumeroNotaFiscal() {
+    if (docNotaFiscal && docNotaFiscal.checked) {
+        linhaNumeroNota.style.display = "table-row";
+    } else {
+        linhaNumeroNota.style.display = "none";
+        if (inputNumeroNota) inputNumeroNota.value = "";
+    }
+}
+
+document.querySelectorAll('input[name="doc"]').forEach(radio => {
+    radio.addEventListener("change", toggleNumeroNotaFiscal);
+});
+
+toggleNumeroNotaFiscal();
 
 </script>

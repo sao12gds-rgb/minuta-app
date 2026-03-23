@@ -179,19 +179,19 @@ height:297mm;
     <td style="width:20%;">&nbsp;</td>
     <td colspan="7" style="padding-left:10px;">
         <label class="frete-opcao">
-            <input type="radio" name="forma_entrega" value="Entrega no endereço">
-            Entrega no endereço
-        </label>
+    <input type="radio" name="forma_entrega" value="Entrega no endereço" onclick="toggleAero(false)">
+    Entrega no endereço
+</label>
 
-        <label class="frete-opcao">
-            <input type="radio" name="forma_entrega" value="Retirada no local">
-            Retirada no local
-        </label>
+<label class="frete-opcao">
+    <input type="radio" name="forma_entrega" value="Retirada no local" onclick="toggleAero(false)">
+    Retirada no local
+</label>
 
-        <label class="frete-opcao">
-            <input type="radio" name="forma_entrega" value="Retirada no aeroporto" id="retiradaAeroporto">
-            Retirada no aeroporto
-        </label>
+<label class="frete-opcao">
+    <input type="radio" name="forma_entrega" value="Retirada no aeroporto" id="retiradaAeroporto" onclick="toggleAero(true)">
+    Retirada no aeroporto
+</label>
     </td>
 </tr>
 
@@ -390,7 +390,21 @@ Autorizo a emissão do conhecimento aéreo e o transporte do(s) volume(s) confor
 
 // AEROPORTO
 function toggleAero(show){
-    document.getElementById("aero").style.display = show ? "table-row" : "none";
+    const linha = document.getElementById("aero");
+    const campo = document.getElementById("campoAeroporto");
+
+    if (!linha) return;
+
+    linha.style.display = show ? "table-row" : "none";
+
+    if (show && campo) {
+        setTimeout(() => {
+            campo.focus();
+            campo.click();
+        }, 100);
+    } else if (campo) {
+        campo.value = "";
+    }
 }
 
 // CEP

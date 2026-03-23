@@ -271,13 +271,19 @@ height:297mm;
 <tr><td colspan="6" class="header">DOCUMENTAÇÃO</td></tr>
 
 <tr>
-<td><input type="radio" name="doc"></td>
+<td><input type="radio" name="doc" id="docNotaFiscal"></td>
 <td colspan="3">Nota fiscal - Valor (R$)</td>
 <td colspan="2"><input class="money"></td>
 </tr>
 
+<tr id="linhaNumeroNota" style="display:none;">
+<td></td>
+<td colspan="3">Número da nota fiscal</td>
+<td colspan="2"><input type="text" name="numero_nota_fiscal" placeholder="Digite o número da nota fiscal"></td>
+</tr>
+
 <tr>
-<td><input type="radio" name="doc"></td>
+<td><input type="radio" name="doc" id="docDeclaracao"></td>
 <td colspan="3">Declaração de conteúdo - Valor declarado (R$)</td>
 <td colspan="2"><input class="money"></td>
 </tr>

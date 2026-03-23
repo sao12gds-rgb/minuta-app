@@ -103,12 +103,20 @@ height:297mm;
 </table>
 
 <table>
-<tr><td colspan="6" class="header">2. PAGAMENTO DO FRETE</td></tr>
 <tr>
-<td><input type="radio" name="pag"></td><td>Pago na origem</td>
-<td><input type="radio" name="pag"></td><td>Cliente correntista</td>
-<td>CNPJ</td><td><input class="cnpj"></td>
+    <td>Pagamento de Frete</td>
+    <td colspan="3">
+        <!-- O name deve ser "frete" para o script encontrar -->
+        <input type="radio" name="frete" value="Pago na origem"> Pago na origem
+        <input type="radio" name="frete" value="Cliente correntista"> Cliente correntista
+    </td>
+    <td>CNPJ</td>
+    <td colspan="3">
+        <!-- O name deve ser "cnpj_frete" e a classe "cpf" para formatar automático -->
+        <input class="cpf" name="cnpj_frete" maxlength="18" placeholder="00.000.000/0000-00">
+    </td>
 </tr>
+
 </table>
 
 <table>
@@ -274,17 +282,24 @@ document.querySelectorAll(".cpf").forEach(el => {
 });
 
 // CNPJ
-document.querySelectorAll(".cnpj").forEach(el=>{
-el.addEventListener("input",()=>{
-let v=el.value.replace(/\D/g,'').slice(0,14);
-v=v.replace(/(\d{2})(\d)/,"$1.$2");
-v=v.replace(/(\d{3})(\d)/,"$1.$2");
-v=v.replace(/(\d{3})(\d)/,"$1.$2");
-v=v.replace(/(\d{4})(\d)/,"$1/$2");
-v=v.replace(/(\d{2})$/,"-$1");
-el.value=v;
-});
-});
+// Função para controlar o campo CNPJ do frete
+document.querySelectorAll('input[name="frete"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        // Localiza o campo de CNPJ que está na mesma linha (ou próximo)
+        const campoCnpj = document.querySelector('input[name="cnpj_frete"]');
+        
+        if (this.value === "Pago na origem") {
+            campoCnpj.value = ""; // Limpa o campo
+            campoCnpj.disabled = true; // Desativa o campo
+            campoCnpj.style.backgroundColor = "#f0f0f0"; // Deixa cinza para indicar inativo
+        } else {
+            campoCnpj.disabled = false; // Ativa o campo
+            campoCnpj.style.backgroundColor = "white"; // Volta ao normal
+            campoCnpj.placeholder = "00.000.000/0000-00";
+        }
+    });
+document.querySelector('input[name="cnpj_frete"]').disabled = true;
+document.querySelector('input[name="cnpj_frete"]').style.backgroundColor = "#f0f0f0";
 
 // RG
 document.querySelectorAll(".rg").forEach(el=>{

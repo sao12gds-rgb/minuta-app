@@ -33,13 +33,47 @@ color:#fff;
 font-weight:bold;
 }
 
-input{
+input:not([type="radio"]){
 width:100%;
 border:none;
 background:#dbe5f1;
 font-weight:bold;
 height:18px;
 outline:none;
+box-sizing:border-box;
+}
+
+input[type="radio"]{
+width:auto;
+height:auto;
+margin:0 6px 0 0;
+vertical-align:middle;
+accent-color:#0b2d5c;
+}
+
+.frete-opcao{
+display:inline-flex;
+align-items:center;
+margin-right:28px;
+font-size:12px;
+font-family:Arial, sans-serif;
+white-space:nowrap;
+}
+
+.frete-opcao input[type="radio"]{
+margin-right:6px;
+}
+
+.campo-frete-label{
+width:20%;
+}
+
+.campo-tomador-label{
+width:10%;
+}
+
+.cnpj-tomador-input{
+width:100%;
 }
 
 button{
@@ -100,36 +134,41 @@ height:297mm;
 <td><input type="radio" name="serv"></td><td>Ecommerce</td>
 <td><input type="radio" name="serv"></td><td>Standard</td>
 </tr>
-</table>
-<!-- 2. PAGAMENTO DE FRETE E TOMADOR -->
-<!-- 2. PAGAMENTO DE FRETE / TOMADOR -->
-<div class="section-title">2. PAGAMENTO DE FRETE / TOMADOR</div>
-<table class="carga-table">
+<table>
     <tr>
-        <td style="width: 20%;">Pagamento de Frete</td>
-        <td colspan="3" style="text-align: left; padding-left: 10px;">
-            <label><input type="radio" name="frete" value="Pago na origem" checked> Pago na origem</label>  
-
-            <label><input type="radio" name="frete" value="Cliente correntista"> Cliente correntista</label>
+        <td colspan="8" class="header">2. PAGAMENTO DE FRETE / TOMADOR</td>
+    </tr>
+    <tr>
+        <td class="campo-frete-label">Pagamento de Frete</td>
+        <td colspan="3" style="padding-left:10px;">
+            <label class="frete-opcao">
+                <input type="radio" name="frete" value="Pago na origem" checked>
+                Pago na origem
+            </label>
+            <label class="frete-opcao">
+                <input type="radio" name="frete" value="Cliente correntista">
+                Cliente correntista
+            </label>
         </td>
-        <td style="width: 10%;">Tomador</td>
-        <td colspan="3" style="text-align: left; padding-left: 10px;">
-            <label><input type="radio" name="tomador" value="Remetente"> Remetente</label>  
-
-            <label><input type="radio" name="tomador" value="Destinatário"> Destinatário</label>
+        <td class="campo-tomador-label">Tomador</td>
+        <td colspan="3" style="padding-left:10px;">
+            <label class="frete-opcao">
+                <input type="radio" name="tomador" value="Remetente">
+                Remetente
+            </label>
+            <label class="frete-opcao">
+                <input type="radio" name="tomador" value="Destinatário">
+                Destinatário
+            </label>
         </td>
     </tr>
     <tr>
         <td>CNPJ do Tomador</td>
         <td colspan="7">
-            <input class="cpf" name="cnpj_frete" maxlength="18" placeholder="00.000.000/0000-00">
+            <input class="cpf cnpj-tomador-input" name="cnpj_frete" maxlength="18" placeholder="00.000.000/0000-00">
         </td>
     </tr>
 </table>
-
-</table>
-
-<table>
 <tr>
     <td style="width: 20%;">Pagamento de Frete</td>
     <td colspan="3" style="text-align: left; padding-left: 10px;">
@@ -307,7 +346,6 @@ document.querySelectorAll(".cpf").forEach(el => {
 });
 
 // CNPJ
-<script>
 // 1. Máscara Inteligente CPF/CNPJ (para todos os campos .cpf)
 document.querySelectorAll('.cpf').forEach(el => {
     el.addEventListener('input', () => {
@@ -350,7 +388,6 @@ radiosFrete.forEach(r => r.addEventListener('change', atualizarEstadoFrete));
 
 // Executa ao carregar para o campo já começar bloqueado
 atualizarEstadoFrete();
-</script>
 
 // RG
 document.querySelectorAll(".rg").forEach(el=>{
